@@ -1,7 +1,14 @@
 body {
     background-color: rgb(228, 204, 176);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+footer {
+    text-align: center;
+    margin-top: auto;
+}
 
 .search-button, .search-input {
     border-radius: 30px;
