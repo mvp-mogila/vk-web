@@ -3,65 +3,20 @@
 {% block content %}
 
 <h2 class="text-center">Question</h2>
-<div class="col-10 container-fluid">
-    <div class="question-row row bg-light">
-        <div class="col-3">
-            <img src="../static/img/default-avatar.png" class="question-user-avatar">
-            <h5><a href="" class="text-decoration-none">Username 1</a>, 01.01.2020 10:10</h5>
-        </div>
-        <div class="col-9 fs-5">
-            <a href="question.html" class="text-danger text-decoration-none">
-                <h3>Title 1</h3>
-            </a>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Temporibus, deleniti accusantium soluta fuga
-                iusto doloribus consequuntur iure. Quae facilis voluptatibus laborum facere alias, maxime eaque beatae
-                fugit rerum corporis doloremque?</p>
-            <input type="button" value="cool" class="btn btn-outline-success btn-sm m-2">
-            <input type="button" value="trash" class="btn btn-outline-danger btn-sm">
-            <span>+ 999</span>
-            <span class="question-tags">
-                <a href="">tag1</a>
-                <a href="">tag2</a>
-                <a href="">tag3</a>
-            </span>
-        </div>
-    </div>
-</div>
-<h2 class="text-center">Comments</h2>
-<div class="comment col-9 container-fluid">
-    <div class="question-row row bg-light">
-        <div class="col-3">
-            <img src="../static/img/default-avatar.png" class="question-user-avatar">
-            <h5><a href="" class="text-decoration-none">Username 2</a>, 01.01.2020 10:10</h5>
-        </div>
-        <div class="col-9 fs-5">
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Temporibus, deleniti accusantium soluta fuga
-                iusto doloribus consequuntur iure. Quae facilis voluptatibus laborum facere alias, maxime eaque beatae
-                fugit rerum corporis doloremque?</p>
-            <span class="fs-3" style="color: green">Correct</span>
-            <input type="button" value="cool" class="btn btn-outline-success btn-sm m-2">
-            <input type="button" value="trash" class="btn btn-outline-danger btn-sm">
-            <span> + 10</span>
-        </div>
-    </div>
-</div>
-<div class="comment col-9 container-fluid">
-    <div class="question-row row bg-light">
-        <div class="col-3">
-            <img src="../static/img/default-avatar.png" class="question-user-avatar">
-            <h5><a href="" class="text-decoration-none">Username 2</a>, 01.01.2020 10:10</h5>
-        </div>
-        <div class="col-9 fs-5">
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Temporibus, deleniti accusantium soluta fuga
-                iusto doloribus consequuntur iure. Quae facilis voluptatibus laborum facere alias, maxime eaque beatae
-                fugit rerum corporis doloremque?</p>
-            <input type="checkbox" style="transform: scale(1.5);"> Correct answer
-            <input type="button" value="cool" class="btn btn-outline-success btn-sm m-2">
-            <input type="button" value="trash" class="btn btn-outline-danger btn-sm">
-            <span> + 1</span>
-        </div>
-    </div>
-</div>
+
+{% include 'components/question-item.html' %}
+
+<h2 class="text-center">Answers</h2>
+
+{% if not answers %}
+<h4 class="text-center">No answers for this question</h3>
+{% endif %}
+
+{% if answers %}
+{% for answer in answers %}
+{% include 'components/answer-item.html' %}
+{% endfor %}
+
 <div class="col-9 container-fluid text-end my-3">
     <nav aria-label="page-navigation">
         <ul class="pagination">
@@ -81,6 +36,9 @@
         </ul>
     </nav>
 </div>
+
+{% endif %}
+
 <div class="col-9 container-fluid">
     <div class="answer row">
         <h2 class="text-center">Your Answer</h2>

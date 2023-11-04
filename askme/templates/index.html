@@ -7,33 +7,7 @@
 <h2 class="text-center">New questions</h2>
 
 {% for question in questions %}
-<div class="col-10 container-fluid">
-    <div class="question-row row bg-light">
-        <div class="col-2">
-            <img src="{% static '/img/default-avatar.png' %}" class="question-user-avatar">
-            <h5><a href="" class="text-decoration-none">{{ question.user }}</a></h5>
-            <h5>{{ question.datetime }}</h5>
-        </div>
-        <div class="col-10 fs-5">
-            <a href="question.html" class="text-danger text-decoration-none">
-                <h3>{{ question.title }}</h3>
-            </a>
-            <p>{{ question.content }}</p>
-            <div class="row">
-                <div class="col-6">
-                    <input type="button" value="+rep" class="btn btn-outline-success btn-sm m-2">
-                    <input type="button" value="-rep" class="btn btn-outline-danger btn-sm">
-                    <span>{{ question.rating }}</span>
-                </div>
-                <div class="col-6">
-                        {% for tag in question.tags %}
-                        <a href="">{{ tag }}</a>
-                        {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{% include 'components/question-item.html' %}
 {% endfor %}
 
 {% endblock %}
