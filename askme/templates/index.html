@@ -4,10 +4,15 @@
 
 {% block content %}
 
-<h2 class="text-center">New questions</h2>
+<h2 class="text-center">{{ title }}</h2>
 
+{% if not questions %}
+<h4>No results</h4>
+{% else %}
 {% for question in questions %}
 {% include 'components/question-item.html' %}
 {% endfor %}
+{% include 'components/pagination.html' %}
+{% endif %}
 
 {% endblock %}

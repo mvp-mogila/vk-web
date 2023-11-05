@@ -13,7 +13,7 @@
         <header>
             <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
                 <div>
-                    <a href="index.html" class="navbar-brand fs-2">
+                    <a href="{% url 'index' %}" class="navbar-brand fs-2">
                         <img src="{% static '/img/favicon-32x32.png' %}">
                         AskMe
                     </a>
@@ -24,10 +24,10 @@
                 <div class="collapse navbar-collapse fs-5" id="navbarContent">
                     <ul class="general-section navbar-nav col-4">
                         <li class="nav-item">
-                            <a href="index.html" class="nav-link">questions</a>
+                            <a href="{% url 'index' %}" class="nav-link">questions</a>
                         </li>
                         <li class="nav-item">
-                            <a href="ask.html" class="nav-link">ask</a>
+                            <a href="{% url 'ask' %}" class="nav-link">ask</a>
                         </li>
                     </ul>
                     <form action="" class="d-flex justify-content-center">
@@ -36,10 +36,10 @@
                     </form>
                     <ul class="user-section navbar-nav mb-auto justify-content-end col-5">
                         <li class="nav-item">
-                            <a href="login.html" class="nav-link">sign in</a>
+                            <a href="{% url 'login' %}" class="nav-link">sign in</a>
                         </li>
                         <li class="nav-item">
-                            <a href="signup.html" class="nav-link">sign up</a>
+                            <a href="{% url 'signup' %}" class="nav-link">sign up</a>
                         </li>
                     </ul>
                 </div>
@@ -55,83 +55,13 @@
 
                         </div>
                         <div class="col-3">
-                            <section class="tags mt-5 mb-5 bg-light">
-                                <h3>Most Popular Tags</h3>
-                                <div class="row">
-                                    <div class="col-4 fs-3">
-                                        <a href="" class="text-danger text-decoration-none">tag1</a>
-                                    </div>
-                                    <div class="col-4 fs-3">
-                                        <a href="" class="text-black text-decoration-none">tag2</a>
-                                    </div>
-                                    <div class="col-4 fs-3">
-                                        <a href="" class="text-primapy text-decoration-none">tag3</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6 fs-3">
-                                        <a href="" class="text-primary text-decoration-none">tag4</a>
-                                    </div>
-                                    <div class="col-6 fs-3">
-                                        <a href="" class="text-success text-decoration-none">tag5</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 fs-3">
-                                        <a href="" class="text-warning text-decoration-none">tag6</a>
-                                    </div>
-                                    <div class="col-4 fs-3">
-                                        <a href="" class="text-info text-decoration-none">tag7</a>
-                                    </div>
-                                    <div class="col-4 fs-3">
-                                        <a href="" class="text-secondary text-decoration-none">tag8</a>
-                                    </div>
-                                </div>
-                            </section>
+                            
+                            {% include 'components/popular-tags.html' %}
+
                             <hr width="89%">
-                            <section class="users mt-5 bg-light">
-                                <h3>Best Members</h3>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <a href="" class="list-group-item list-group-item-action fs-4">User1</a>
-                                    </div>
-                                    <div class="col-6">
-                                        <h4>100</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <a href="" class="list-group-item list-group-item-action fs-4">User2</a>
-                                    </div>
-                                    <div class="col-6">
-                                        <h4>99</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <a href="" class="list-group-item list-group-item-action fs-4">User3</a>
-                                    </div>
-                                    <div class="col-6">
-                                        <h4>87</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <a href="" class="list-group-item list-group-item-action fs-4">User4</a>
-                                    </div>
-                                    <div class="col-6">
-                                        <h4>34</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <a href="" class="list-group-item list-group-item-action fs-4">User5</a>
-                                    </div>
-                                    <div class="col-6">
-                                        <h4>1</h4>
-                                    </div>
-                                </div>
-                            </section>
+                            
+                            {% include 'components/best-members.html' %}
+
                         </div>
                     </div>
             </div>

@@ -68,12 +68,6 @@ cover/
 # Translations
 *.mo
 
-# Django stuff:
-
-# Flask stuff:
-instance/
-.webassets-cache
-
 # Scrapy stuff:
 .scrapy
 
@@ -109,6 +103,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+*module_loading.py
 
 # Spyder project settings
 .spyderproject

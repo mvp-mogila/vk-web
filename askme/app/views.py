@@ -29,7 +29,10 @@ ANSWERS = [
 
 
 def index_handler(request):
-    context = {'questions': paginate(QUESTIONS, 1)}
+    page = request.GET.get('page')
+    if (not page):
+        page = 1
+    context = {'title': 'New questions', 'questions': paginate(QUESTIONS, page)}
     return render(request, "index.html", context)
 
 
@@ -45,12 +48,28 @@ def ask_handler(request):
     return render(request, "ask.html")
 
 
+def tag_handler(request, tag_name):
+    page = request.GET.get('page')
+    if (not page):
+        page = 1
+    context = {'title': f"Questions by tag \"{tag_name}\"", 'questions': paginate(QUESTIONS, page)}
+    return render(request, "index.html", context)
+
+
 def question_handler(request, question_id):
+    page = request.GET.get('page')
+    if (not page):
+        page = 1
     if (question_id > 5):
-        context = {'question': QUESTIONS[question_id], 'answers': paginate(ANSWERS, 1)}
+        context = {'question': QUESTIONS[question_id], 'answers': paginate(ANSWERS, page)}
     else:
         context = {'question': QUESTIONS[question_id]}
     return render(request, "question.html", context)
+
+
+def hot_question_handler(request):
+    context = {'title': 'Top questions', 'questions': [ QUESTIONS[9], QUESTIONS[8] ]}
+    return render(request, "index.html", context)
 
 
 def paginate(objects, page, per_page = 3):
