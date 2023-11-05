@@ -1,4 +1,4 @@
-from django.http import HttpRequest, HttpResponse 
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.core.paginator import Paginator
 
@@ -24,7 +24,7 @@ ANSWERS = [
         'content': f"Some text {i}",
         'rating': i * 3,
         'correct': True
-    } for i in range(3)
+    } for i in range(10)
 ]
 
 
@@ -49,17 +49,21 @@ def ask_handler(request):
 
 
 def tag_handler(request, tag_name):
-    page = request.GET.get('page')
-    if (not page):
-        page = 1
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except ValueError:
+        raise HttpResponseBadRequest()
     context = {'title': f"Questions by tag \"{tag_name}\"", 'questions': paginate(QUESTIONS, page)}
     return render(request, "index.html", context)
 
 
 def question_handler(request, question_id):
-    page = request.GET.get('page')
-    if (not page):
-        page = 1
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except ValueError:
+        raise HttpResponseBadRequest()
     if (question_id > 5):
         context = {'question': QUESTIONS[question_id], 'answers': paginate(ANSWERS, page)}
     else:
@@ -68,7 +72,12 @@ def question_handler(request, question_id):
 
 
 def hot_question_handler(request):
-    context = {'title': 'Top questions', 'questions': [ QUESTIONS[9], QUESTIONS[8] ]}
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except ValueError:
+        raise HttpResponseBadRequest()
+    context = {'title': 'Top questions', 'questions': QUESTIONS}
     return render(request, "index.html", context)
 
 
