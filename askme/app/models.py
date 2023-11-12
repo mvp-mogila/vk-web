@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from managers import QuestionManager
-
 
 class Question(models.Model):
     def __str__(self):
@@ -15,7 +13,7 @@ class Question(models.Model):
 
     author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="question")
     answers = models.ForeignKey("Answer", on_delete=models.PROTECT, related_name="question")
-    tags = models.ManyToManyField("Tag", on_delete=models.PROTECT, related_name="question")
+    tags = models.ManyToManyField("Tag", related_name="question")
 
 
 class Answer(models.Model):
