@@ -5,7 +5,7 @@
         <div class="col-3">
             <img src="{% static '/img/default-avatar.png' %}" class="question-user-avatar">
             <h5><a href="" class="text-decoration-none">{{ answer.user }}</a></h5>
-            <h5>{{ answer.datetime }}</h5>
+            <h5>{{ answer.time_created }}</h5>
         </div>
         <div class="col-9 fs-5">
             <p>{{ answer.content }}</p>

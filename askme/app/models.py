@@ -1,43 +1,66 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+
+from app.managers import QuestionManager, TagManager
 
 
 class Question(models.Model):
-    def __str__(self):
-        return self.title
-
     title = models.CharField(max_length=50)
     content = models.TextField()
-    date = models.DateTimeField(auto_now=False, auto_now_add=False)
-    rating = models.IntegerField()
+    time_created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="question")
-    answers = models.ForeignKey("Answer", on_delete=models.PROTECT, related_name="question")
     tags = models.ManyToManyField("Tag", related_name="question")
+    reactions = GenericRelation("Reaction")
 
+    objects = QuestionManager()
+
+    def __str__(self):
+        return self.title
+        
 
 class Answer(models.Model):
+    content = models.TextField()
+    time_created = models.DateTimeField(auto_now = False, auto_now_add = True)
+    correct = models.BooleanField(default=False)
+
+    author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="answer")
+    question = models.ForeignKey("Question", on_delete=models.CASCADE, related_name="answer")
+    reactions = GenericRelation("Reaction")
+
     def __str__(self):
         return self.content
 
-    content = models.TextField()
-    date = models.DateTimeField(auto_now = False, auto_now_add = False)
-    rating = models.IntegerField()
-    correct = models.BooleanField()
-
-    author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="answer")
-
 
 class Tag(models.Model):
+    name = models.CharField(max_length = 50)
+
+    objects = TagManager()
+
     def __str__(self):
         return self.name
-
-    name = models.CharField(max_length = 50)
 
 
 class Profile(models.Model):
-    def __str__(self):
-        return self.name
+    profile_pic = models.ImageField(blank=True, null=True, upload_to="../uploads")
+    rating = models.IntegerField(default=0)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    
+
+    def __str__(self):
+        return self.user.username
+
+
+class Reaction(models.Model):
+    positive = models.BooleanField()
+    time_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    author = models.ForeignKey("Profile", on_delete=models.DO_NOTHING, related_name="reaction")
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.IntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    # objects = ReactionManager()

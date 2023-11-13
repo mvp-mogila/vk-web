@@ -5,7 +5,7 @@
         <div class="col-2">
             <img src="{% static '/img/default-avatar.png' %}" class="question-user-avatar">
             <h5><a href="" class="text-decoration-none">{{ question.user }}</a></h5>
-            <h5>{{ question.datetime }}</h5>
+            <h5>{{ question.time_created }}</h5>
         </div>
         <div class="col-10 fs-5">
             <a href="{% url 'question' question_id=question.id %}" class="text-danger text-decoration-none">
@@ -19,7 +19,7 @@
                     <span>{{ question.rating }}</span>
                 </div>
                 <div class="col-6">
-                        {% for tag in question.tags %}
+                        {% for tag in question.tags.all %}
                         <a href="">{{ tag }}</a>
                         {% endfor %}
                 </div>

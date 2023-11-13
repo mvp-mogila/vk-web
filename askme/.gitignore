@@ -129,7 +129,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-askme/__pycache__/*
+askme/__pycache__
 
 app/migrations
 app/db_settings.py

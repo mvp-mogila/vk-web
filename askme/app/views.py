@@ -1,38 +1,16 @@
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import render
 from django.core.paginator import Paginator
 
-
-QUESTIONS = [
-        {
-            'id': i,
-            'title': f"Title {i}",
-            'user': f"User {i}",
-            'datetime': '01.01.2023 10:10',
-            'content': f"Some text {i} ?",
-            'rating': i * 2,
-            'tags': [f"tag {j}" for j in range(3)]
-        } for i in range(10)
-    ]
-
-
-ANSWERS = [
-    {
-        'id': i,
-        'user': f"User {i}",
-        'datetime': '01.01.2023 10:11',
-        'content': f"Some text {i}",
-        'rating': i * 3,
-        'correct': True
-    } for i in range(10)
-]
+from .models import Question, Tag
 
 
 def index_handler(request):
-    page = request.GET.get('page')
-    if (not page):
-        page = 1
-    context = {'title': 'New questions', 'questions': paginate(QUESTIONS, page)}
+    page = request.GET.get('page', 1)
+    questions = Question.objects.new()
+    if (not questions):
+        return HttpResponseNotFound()
+    context = {'title': 'New questions', 'questions': paginate(questions, page)}
     return render(request, "index.html", context)
 
 
@@ -50,37 +28,37 @@ def ask_handler(request):
 
 def tag_handler(request, tag_name):
     page = request.GET.get('page', 1)
-    try:
-        page = int(page)
-    except ValueError:
-        raise HttpResponseBadRequest()
-    context = {'title': f"Questions by tag \"{tag_name}\"", 'questions': paginate(QUESTIONS, page)}
+    questions = Tag.objects.questions_by_tag(tag_name)
+    if (not questions):
+        return HttpResponseNotFound()
+    context = {'title': f"Questions by tag \"{tag_name}\"", 'questions': paginate(questions, page)}
     return render(request, "index.html", context)
 
 
 def question_handler(request, question_id):
     page = request.GET.get('page', 1)
-    try:
-        page = int(page)
-    except ValueError:
-        raise HttpResponseBadRequest()
-    if (question_id > 5):
-        context = {'question': QUESTIONS[question_id], 'answers': paginate(ANSWERS, page)}
-    else:
-        context = {'question': QUESTIONS[question_id]}
+    question = Question.objects.get_by_id(question_id)
+    if (not question):
+        return HttpResponseNotFound()
+    answers = question.answer.all()
+    context = {'question': question, 'answers': paginate(answers, page)}
     return render(request, "question.html", context)
 
 
 def hot_question_handler(request):
     page = request.GET.get('page', 1)
-    try:
-        page = int(page)
-    except ValueError:
-        raise HttpResponseBadRequest()
-    context = {'title': 'Top questions', 'questions': QUESTIONS}
+    questions = Question.objects.hot()
+    if (not questions):
+        return HttpResponseNotFound()
+    context = {'title': 'Top questions', 'questions': questions}
     return render(request, "index.html", context)
 
 
 def paginate(objects, page, per_page = 3):
+    try:
+        page = int(page)
+    except ValueError:
+        raise HttpResponseBadRequest()
+    print(objects)
     paginator = Paginator(objects, per_page)
     return paginator.page(page)
