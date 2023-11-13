@@ -99,10 +99,7 @@ class Command(BaseCommand):
             used_pairs.append((profile_id, question_id))
             question = Question.objects.get(id=question_id)
             delta = bool(random.randint(0, 1))
-            if (delta):
-                question.rating += 1
-            else:
-                question.rating -= 1
+            question.rating += random.randint(-100, 100)
             question.save()
             question_reactions.append(Reaction(author_id=profile_id, content_object=question, positive=delta))
         question_reactions = Reaction.objects.bulk_create(question_reactions)
@@ -118,10 +115,7 @@ class Command(BaseCommand):
             used_pairs.append((profile_id, answer_id))
             answer = Answer.objects.get(id=answer_id)
             delta = bool(random.randint(0, 1))
-            if (delta):
-                answer.rating += 1
-            else:
-                answer.rating -= 1
+            answer.rating += random.randint(-10, 10)
             answer.save()
             answer_reactions.append(Reaction(author_id=profile_id, content_object=answer, positive=delta))
         answer_reactions = Reaction.objects.bulk_create(answer_reactions)

@@ -23,7 +23,8 @@ from app import views
 
 urlpatterns = [
     path('', views.index_handler, name = "index"),
-    path('hot', views.hot_question_handler, name = "hot"),
+    path('new', views.new_questions_handler, name = "new"),
+    path('hot', views.hot_questions_handler, name = "hot"),
     path('signup', views.signup_handler, name = "signup"),
     path('login', views.login_handler, name = "login"),
     path('ask', views.ask_handler, name = "ask"),

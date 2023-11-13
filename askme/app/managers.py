@@ -24,14 +24,14 @@ class QuestionManager(models.Manager):
 
     def new(self):
         try:
-            new_questions = self.get_queryset().new()[:15]
+            new_questions = self.get_queryset().new()[:100]
         except ObjectDoesNotExist:
             return None
         return new_questions
     
     def hot(self):
         try:
-            hot_questions = self.get_queryset().hot()[:15]
+            hot_questions = self.get_queryset().hot()[:100]
         except ObjectDoesNotExist:
             return None
         return hot_questions
