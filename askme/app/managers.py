@@ -8,7 +8,7 @@ class QuestionQuerySet(models.QuerySet):
         return self.order_by('time_created')
 
     def hot(self):
-        return self.order_by('rating')
+        return self.order_by('-rating')
 
 
 class QuestionManager(models.Manager):

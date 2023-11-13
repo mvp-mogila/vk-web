@@ -2,21 +2,21 @@
 
 <div class="answer col-9 container-fluid">
     <div class="answer-row row bg-light">
-        <div class="col-3">
+        <div class="col-2">
             <img src="{% static '/img/default-avatar.png' %}" class="question-user-avatar">
-            <h5><a href="" class="text-decoration-none">{{ answer.user }}</a></h5>
+            <h5><a href="" class="text-decoration-none">{{ answer.author }}</a></h5>
             <h5>{{ answer.time_created }}</h5>
         </div>
         <div class="col-9 fs-5">
             <p>{{ answer.content }}</p>
+        </div>
+        <div class="col-1">
             {% if answer.correct %}
-            <span>
-                <h4 style="color: green">Correct</h4>
-            </span>
+            <img src="{% static '/img/correct.png' %}" class="correct-answer-icon mt-2">
             {% endif %}
-            <input type="button" value="+rep" class="btn btn-outline-success btn-sm m-2">
+            <input type="button" value="+rep" class="btn btn-outline-success btn-sm mt-3">
+            <div>{{ answer.rating }}</div>
             <input type="button" value="-rep" class="btn btn-outline-danger btn-sm">
-            <span>{{ answer.rating }}</span>
         </div>
     </div>
 </div>

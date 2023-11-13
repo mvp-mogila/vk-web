@@ -1,19 +1,29 @@
 <div class="col-9 container-fluid text-end my-3">
     <nav aria-label="page-navigation">
         <ul class="pagination">
+
+            {% if objects.has_previous %}
             <li class="page-item">
-                <a class="page-link text-dark" href="#" aria-label="Previous">
+                <a class="page-link text-dark" href="?page={{ objects.previous_page_number }}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+            {% endif %}
+
+            {% for page in objects.paginator.page_range %}
             <li class="page-item">
-                <a class="page-link text-dark" href="#" aria-label="Next">
+                <a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a>
+            </li>
+            {% endfor %}
+
+            {% if objects.has_next %}
+            <li class="page-item">
+                <a class="page-link text-dark" href="?page={{ objects.next_page_number }}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
+            {% endif %}
+
         </ul>
     </nav>
 </div>

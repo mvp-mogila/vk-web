@@ -56,3 +56,8 @@ textarea {
 .question-tags {
     margin-left: 500px;
 }
+
+.correct-answer-icon {
+    max-width: 40px;
+    max-height: 40px;
+}

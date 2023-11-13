@@ -10,6 +10,7 @@ class Question(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
     time_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    rating = models.IntegerField(default=0)
 
     author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="question")
     tags = models.ManyToManyField("Tag", related_name="question")
@@ -25,10 +26,14 @@ class Answer(models.Model):
     content = models.TextField()
     time_created = models.DateTimeField(auto_now = False, auto_now_add = True)
     correct = models.BooleanField(default=False)
+    rating = models.IntegerField(default=0)
 
     author = models.ForeignKey("Profile", on_delete=models.PROTECT, related_name="answer")
     question = models.ForeignKey("Question", on_delete=models.CASCADE, related_name="answer")
     reactions = GenericRelation("Reaction")
+
+    class Meta:
+        ordering = ['rating']
 
     def __str__(self):
         return self.content

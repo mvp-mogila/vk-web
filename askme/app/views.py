@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import render
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Question, Tag
 
@@ -10,7 +10,7 @@ def index_handler(request):
     questions = Question.objects.new()
     if (not questions):
         return HttpResponseNotFound()
-    context = {'title': 'New questions', 'questions': paginate(questions, page)}
+    context = {'title': 'New questions', 'objects': paginate(questions, page)}
     return render(request, "index.html", context)
 
 
@@ -31,7 +31,7 @@ def tag_handler(request, tag_name):
     questions = Tag.objects.questions_by_tag(tag_name)
     if (not questions):
         return HttpResponseNotFound()
-    context = {'title': f"Questions by tag \"{tag_name}\"", 'questions': paginate(questions, page)}
+    context = {'title': f"Questions by tag \"{tag_name}\"", 'objects': paginate(questions, page)}
     return render(request, "index.html", context)
 
 
@@ -41,7 +41,7 @@ def question_handler(request, question_id):
     if (not question):
         return HttpResponseNotFound()
     answers = question.answer.all()
-    context = {'question': question, 'answers': paginate(answers, page)}
+    context = {'question': question, 'objects': paginate(answers, page)}
     return render(request, "question.html", context)
 
 
@@ -50,15 +50,16 @@ def hot_question_handler(request):
     questions = Question.objects.hot()
     if (not questions):
         return HttpResponseNotFound()
-    context = {'title': 'Top questions', 'questions': questions}
+    context = {'title': 'Top questions', 'objects': paginate(questions, page)}
     return render(request, "index.html", context)
 
 
-def paginate(objects, page, per_page = 3):
-    try:
-        page = int(page)
-    except ValueError:
-        raise HttpResponseBadRequest()
-    print(objects)
+def paginate(objects, page_num, per_page = 3):
     paginator = Paginator(objects, per_page)
-    return paginator.page(page)
+    # try:
+    page = paginator.page(page_num)
+    # except PageNotAnInteger:
+    #     raise HttpResponseBadRequest()
+    # except EmptyPage:
+    #     raise HttpResponseNotFound()
+    return page

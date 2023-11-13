@@ -6,13 +6,20 @@
 
 <h2 class="text-center">{{ title }}</h2>
 
-{% if not questions %}
+{% if not objects %}
+
 <h4>No results</h4>
+
 {% else %}
-{% for question in questions %}
+
+{% for question in objects %}
 {% include 'components/question-item.html' %}
 {% endfor %}
+
+{% if objects.has_other_pages %}
 {% include 'components/pagination.html' %}
+{% endif %}
+
 {% endif %}
 
 {% endblock %}

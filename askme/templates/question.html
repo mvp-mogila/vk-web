@@ -8,13 +8,20 @@
 
 <h2 class="text-center">Answers</h2>
 
-{% if not answers %}
+{% if not objects %}
+
 <h4 class="text-center">No answers for this question</h3>
+
 {% else %}
-{% for answer in answers %}
+
+{% for answer in objects %}
 {% include 'components/answer-item.html' %}
 {% endfor %}
+
+{% if objects.has_other_pages %}
 {% include 'components/pagination.html' %}
+{% endif %}
+
 {% endif %}
 
 <div class="col-9 container-fluid">
