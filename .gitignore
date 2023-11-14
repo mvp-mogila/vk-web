@@ -131,5 +131,6 @@ cython_debug/
 
 askme/__pycache__
 
-app/migrations
-app/db_settings.py
+.vscode
+askme/app/migrations
+askme/app/db_settings.py
