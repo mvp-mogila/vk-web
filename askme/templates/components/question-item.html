@@ -15,7 +15,7 @@
             <div class="row position-bottom fs-6">
                 <div class="col-12 text-end">
                     {% for tag in question.tags.all %}
-                    <a href="">{{ tag }}</a>
+                    <a href="{% url 'tag' tag_name=tag.name %}">{{ tag }}</a>
                     {% endfor %}
                 </div>
             </div>

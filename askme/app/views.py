@@ -29,7 +29,7 @@ def ask_handler(request):
 
 def tag_handler(request, tag_name):
     page = request.GET.get('page', 1)
-    questions = Tag.objects.questions_by_tag(tag_name)
+    questions = Question.objects.questions_by_tag(tag_name)
     if (not questions):
         return HttpResponseNotFound()
     context = {'title': f"Questions by tag \"{tag_name}\"", 'objects': paginate(questions, page)}

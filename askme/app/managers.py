@@ -10,6 +10,8 @@ class QuestionQuerySet(models.QuerySet):
     def hot(self):
         return self.order_by('-rating')
 
+    def questions_by_tag(self, tag):
+        return self.filter(tags__name=tag)
 
 class QuestionManager(models.Manager):
     def get_queryset(self):
@@ -36,19 +38,17 @@ class QuestionManager(models.Manager):
             return None
         return hot_questions
 
+    def questions_by_tag(self, tag):
+        try:
+            questions = self.get_queryset().questions_by_tag(tag)
+        except ObjectDoesNotExist:
+            return None
+        return questions
+
 
 class TagManager(models.Manager):
     def best_tags(self):
         return self.all().order_by('-rating')
-
-    def questions_by_tag(self, tag_name):
-        try:
-            tag = self.get(name=tag_name)
-        except ObjectDoesNotExist:
-            return None
-        questions = tag.question.all()
-        return questions
-
 
 
 class UserManager(models.Manager):
