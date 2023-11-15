@@ -86,14 +86,9 @@ class Command(BaseCommand):
     def create_reactions(self, count, prof_min_id, prof_max_id, que_min_id, que_max_id, ans_min_id, ans_max_id):
         print("Creating reactions ...")
         question_reactions = []
-        used_pairs = []
-        for i in range(count * 10):
+        for i in range(count * 100):
             profile_id = random.randint(prof_min_id, prof_max_id)
             question_id = random.randint(que_min_id, que_max_id)
-            while (profile_id, question_id) in used_pairs:
-                profile_id = random.randint(prof_min_id, prof_max_id)
-                question_id = random.randint(que_min_id, que_max_id)
-            used_pairs.append((profile_id, question_id))
             question = Question.objects.get(id=question_id)
             delta = bool(random.randint(0, 1))
             question.rating += random.randint(-100, 100)
@@ -102,14 +97,9 @@ class Command(BaseCommand):
         question_reactions = Reaction.objects.bulk_create(question_reactions)
 
         answer_reactions = []
-        used_pairs = []
         for i in range(count * 100):
             profile_id = random.randint(prof_min_id, prof_max_id)
             answer_id = random.randint(ans_min_id, ans_max_id)
-            while (profile_id, answer_id) in used_pairs:
-                profile_id = random.randint(prof_min_id, prof_max_id)
-                answer_id = random.randint(ans_min_id, ans_max_id)
-            used_pairs.append((profile_id, answer_id))
             answer = Answer.objects.get(id=answer_id)
             delta = bool(random.randint(0, 1))
             answer.rating += random.randint(-10, 10)
