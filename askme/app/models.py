@@ -33,7 +33,7 @@ class Answer(models.Model):
     reactions = GenericRelation("Reaction")
 
     class Meta:
-        ordering = ['rating']
+        ordering = ['-rating']
 
     def __str__(self):
         return self.content

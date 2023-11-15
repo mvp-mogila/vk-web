@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.core.exceptions import SuspiciousOperation
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .models import Question, Tag
+from .models import Question
 
 
 def index_handler(request):
