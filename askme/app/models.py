@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
-from app.managers import QuestionManager, TagManager
+from app.managers import QuestionManager, TagManager, UserManager
 
 
 class Question(models.Model):
@@ -53,6 +53,8 @@ class Profile(models.Model):
     rating = models.IntegerField(default=0)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+
+    objects = UserManager()
 
     def __str__(self):
         return self.user.username

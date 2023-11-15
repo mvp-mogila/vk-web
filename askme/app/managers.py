@@ -38,6 +38,9 @@ class QuestionManager(models.Manager):
 
 
 class TagManager(models.Manager):
+    def best_tags(self):
+        return self.all().order_by('-rating')
+
     def questions_by_tag(self, tag_name):
         try:
             tag = self.get(name=tag_name)
@@ -48,11 +51,14 @@ class TagManager(models.Manager):
 
 
 
-# class UserManager(models.Manager):
-#     def count_rating(self):
-#         rating = self.reactions__positive.filter(positive = True)
-#         rating -= self.reactions__positive.filter(positive = False)
-#         return rating
+class UserManager(models.Manager):
+    def best_members(self):
+        return self.all().order_by('-rating')
+
+    def count_rating(self):
+        rating = self.reactions__positive.filter(positive = True)
+        rating -= self.reactions__positive.filter(positive = False)
+        return rating
 
 
 # class ReactionManager(models.Manager):

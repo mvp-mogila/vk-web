@@ -2,23 +2,6 @@
     <nav aria-label="page-navigation">
         <ul class="pagination">
 
-            {% comment %} 
-            {% block pagination %}
-    {% for page_number in page_obj.adjusted_elided_pages %}
-        {% if page_number == page_obj.paginator.ELLIPSIS %}
-            {{page_number}}
-        {% else %}
-            <a
-                href="{% url 'terms-by-page' page_number %}"
-                class="{% if page_number == page_obj.number %}current{% endif %}"
-            >
-                {{page_number}}
-            </a>
-        {% endif %}
-    {% endfor %}
-{% endblock %}
-            {% endcomment %}
-
             {% if objects.has_previous %}
             <li class="page-item">
                 <a class="page-link text-dark" href="?page={{ objects.previous_page_number }}" aria-label="Previous">
@@ -38,8 +21,6 @@
             </li>
             {% endif %}
             {% endfor %}
-
-            {% comment %} {% endcomment %}
 
             {% if objects.has_next %}
             <li class="page-item">
