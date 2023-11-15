@@ -40,11 +40,8 @@ class Command(BaseCommand):
         users = []
         profiles = []
         for i in range(count):
-            users.append(User(id=i+1, username=self.faker.unique.user_name(), first_name=self.faker.first_name(), last_name=self.faker.last_name(), email=self.faker.email(), password=self.faker.password()))
-        users = User.objects.bulk_create(users)
-        for i in range(count):
-            user = User.objects.get(id=(i+1))
-            profiles.append(Profile(user=user, profile_pic="../../../static/img/default-avatar.png"))
+            users.append(User.objects.create(username=self.faker.unique.user_name(), first_name=self.faker.first_name(), last_name=self.faker.last_name(), email=self.faker.email(), password=self.faker.password()))
+            profiles.append(Profile(user=users[i], profile_pic="../../../static/img/default-avatar.png"))
         profiles = Profile.objects.bulk_create(profiles)
 
 
@@ -52,7 +49,7 @@ class Command(BaseCommand):
         print("Creating tags ...")
         tags = []
         for i in range(count):
-            tags.append(Tag(id=i + 1, name=self.faker.word()))
+            tags.append(Tag(name=self.faker.word()))
         tags = Tag.objects.bulk_create(tags)
 
 
@@ -63,7 +60,7 @@ class Command(BaseCommand):
             title = self.faker.word() + '?'
             content = self.faker.word()
             profile_id = random.randint(prof_min_id, prof_max_id)
-            questions.append(Question(id=i + 1, content=content, title=title, author_id=profile_id))
+            questions.append(Question(content=content, title=title, author_id=profile_id))
         questions = Question.objects.bulk_create(questions)
         tags = [None] * 5 
         for i in range(count):
@@ -82,7 +79,7 @@ class Command(BaseCommand):
             content = self.faker.word()
             profile_id = random.randint(prof_min_id, prof_max_id)
             question_id = random.randint(que_min_id, que_max_id)
-            answers.append(Answer(id=i + 1,content=content, author_id=profile_id, question_id=question_id))
+            answers.append(Answer(content=content, author_id=profile_id, question_id=question_id))
         answers = Answer.objects.bulk_create(answers)
 
 
