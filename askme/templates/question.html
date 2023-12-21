@@ -1,37 +1,26 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-
-<h2 class="text-center">Question</h2>
-
-{% include 'components/question-item.html' %}
-
-<h2 class="text-center">Answers</h2>
-
-{% if not objects %}
-
-<h4 class="text-center">No answers for this question</h3>
-
-{% else %}
-
-{% for answer in objects %}
-{% include 'components/answer-item.html' %}
-{% endfor %}
-
-{% if objects.has_other_pages %}
-{% include 'components/pagination.html' %}
-{% endif %}
-
-{% endif %}
-
-<div class="col-9 container-fluid">
-    <div class="answer row">
-        <h2 class="text-center">Your Answer</h2>
-        <textarea cols="80" rows="5" name="answer-text"></textarea>
-        <div class="col-1">
-            <input type="button" value="Comment!" class="btn btn-success m-2">
+    <h2 class="text-center">Question</h2>
+    {% include 'components/question-item.html' %}
+    <h2 class="text-center">Answers</h2>
+    {% if not objects %}
+        <h4 class="text-center">No answers for this question</h3>
+    {% else %}
+        {% for answer in objects %}
+            {% include 'components/answer-item.html' %}
+        {% endfor %}
+        {% if objects.has_other_pages %}
+            {% include 'components/pagination.html' %}
+        {% endif %}
+    {% endif %}
+    <div class="col-9 container-fluid">
+        <div class="answer row">
+            <h2 class="text-center">Your Answer</h2>
+            <textarea cols="80" rows="5" name="answer-text"></textarea>
+            <div class="col-1">
+                <input type="button" value="Comment!" class="btn btn-success m-2">
+            </div>
         </div>
     </div>
-</div>
-
 {% endblock %}

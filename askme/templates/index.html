@@ -1,25 +1,15 @@
 {% extends 'layouts/base.html' %}
 
-{% load static %}
-
 {% block content %}
-
-<h2 class="text-center">{{ title }}</h2>
-
-{% if not objects %}
-
-<h4>No results</h4>
-
-{% else %}
-
-{% for question in objects %}
-{% include 'components/question-item.html' %}
-{% endfor %}
-
-{% if objects.has_other_pages %}
-{% include 'components/pagination.html' %}
-{% endif %}
-
-{% endif %}
-
+    <h2 class="text-center">{{ title }}</h2>
+    {% if not objects %}
+        <h4>No results</h4>
+    {% else %}
+        {% for question in objects %}
+            {% include 'components/question-item.html' %}
+        {% endfor %}
+        {% if objects.has_other_pages %}
+            {% include 'components/pagination.html' %}
+        {% endif %}
+    {% endif %}
 {% endblock %}

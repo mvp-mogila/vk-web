@@ -38,35 +38,40 @@
                         <button class="search-button btn btn-outline-warning">Search</button>
                     </form>
                     <ul class="user-section navbar-nav mb-auto justify-content-end col-5">
-                        <li class="nav-item">
-                            <a href="{% url 'login' %}" class="nav-link">sign in</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'signup' %}" class="nav-link">sign up</a>
-                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="profile.html" class="nav-link">{{ user.username }}
+                                    <img src="{{ user.profile_pic }}" width="31" height="31">
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'logout' %}" class="nav-link">sign out</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'login' %}" class="nav-link">sign in</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'signup' %}" class="nav-link">sign up</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </nav>
         </header>
         <main class="flex-shrink-0">
             <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-9">
-
-                            {% block content %}
-                            {% endblock %}
-
-                        </div>
-                        <div class="col-3">
-                            
-                            {% include 'components/popular-tags.html' %}
-
-                            <hr width="89%">
-                            
-                            {% include 'components/best-members.html' %}
-
-                        </div>
+                <div class="row">
+                    <div class="col-9">
+                        {% block content %}
+                        {% endblock %}
                     </div>
+                    <div class="col-3">
+                        {% include 'components/popular-tags.html' %}
+                        <hr width="89%">
+                        {% include 'components/best-members.html' %}
+                    </div>
+                </div>
             </div>
         </main>
         <footer class="bg-dark text-center">
