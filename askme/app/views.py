@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from django.http import HttpResponseNotFound, Http404
 from django.shortcuts import redirect, render
 from django.core.exceptions import SuspiciousOperation
@@ -6,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 
 from app.models import Question, Profile
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
 
 
 def index_handler(request):
@@ -19,7 +20,17 @@ def index_handler(request):
 
 
 def signup_handler(request):
-    return render(request, 'signup.html')
+    if (request.method == 'GET'):
+        registration_form = RegistrationForm()
+
+    if (request.method == 'POST'):
+        registration_form = RegistrationForm(request.POST)
+        if (registration_form.is_valid()):
+            new_user = registration_form.save()
+            Profile.objects.create(user = new_user, profile_pic = registration_form.cleaned_data['profile_picture'])
+
+    context = {'registration_form': registration_form}
+    return render(request, 'signup.html', context)
 
 
 def login_handler(request):
@@ -38,12 +49,13 @@ def login_handler(request):
                 login_form = LoginForm()
                 error = True
 
-    return render(request, 'login.html', context={'login_form': login_form, 'error': error})
+    context = {'login_form': login_form, 'error': error}
+    return render(request, 'login.html', context)
 
 
 def logout_handler(request):
     logout(request)
-    return redirect(reverse('index'))
+    return redirect(reverse('login'))
 
 def ask_handler(request):
     return render(request, 'ask.html')

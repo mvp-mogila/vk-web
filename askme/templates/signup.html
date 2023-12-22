@@ -1,45 +1,16 @@
 {% extends 'layouts/base.html' %}
 
+{% load static %}
+{% load django_bootstrap5 %}
 {% block content %}
 
-<form class="form-signup">
+<form class="form-signup" method="POST" action="{% url 'signup' %}">
     <div class="col-md-8 container-fluid">
         <h2>Registration</h2>
         <p class="fs-4">Create your new account and enjoy our website!</p>
-        <div class="row">
-            <div class="col-md-6">
-                <label class="col-form-label-lg">Surname</label>
-                <input type="text" class="form-control" name="surname" placeholder="Ivanov">
-            </div>
-            <div class="col-md-6">
-                <label class="col-form-label-lg">Name</label>
-                <input type="text" class="form-control" name="name" placeholder="Ivan">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-form-label-lg">Email address</label>
-            <input type="text" class="form-control" name="email" placeholder="megachel@mail.ru">
-        </div>
-        <div class="form-group">
-            <label class="col-form-label-lg">Username</label>
-            <input type="text" class="form-control" name="username" placeholder="Bob-The-Builder">
-        </div>
-        <div class="form-group">
-            <label class="col-form-label-lg">Create password</label>
-            <input type="password" class="form-control" name="password-1" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <label class="col-form-label-lg">Confirm password</label>
-            <input type="repassword" class="form-control" name="password-2" placeholder="Confirm password">
-        </div>
-        <div class="form-group mt-3 fs-5">
-            <input type="checkbox" style="transform: scale(1.4);">
-            I agree with terms of use
-        </div>
-        <div class="row">
-            <h3 style="color: red">Sorry, incorrect input!</h3>
-        </div>
-        <input type="submit" class="btn btn-success mt-2" value="Create account!">
+        {% csrf_token %}
+        {% bootstrap_form registration_form %}
+        {% bootstrap_button button_type="submit" button_class="btn btn-success" content="Create account!" %}
     </div>
 </form>
 
