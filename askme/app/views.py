@@ -6,8 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from app.models import Question, Profile
-from app.forms import LoginForm, RegistrationForm
+from app.models import Question, Profile, Tag
+from app.forms import LoginForm, RegistrationForm, AskForm
 
 
 def index_handler(request):
@@ -19,7 +19,6 @@ def index_handler(request):
     return render(request, 'index.html', context)
 
 
-# TODO profile_picture
 def signup_handler(request):
     if (request.method == 'GET'):
         registration_form = RegistrationForm()
@@ -27,7 +26,7 @@ def signup_handler(request):
     if (request.method == 'POST'):
         registration_form = RegistrationForm(request.POST)
         if (registration_form.is_valid()):
-            new_user = registration_form.save()
+            new_user = registration_form.save() # TODO profile_picture
             Profile.objects.create(user = new_user, profile_pic = registration_form.cleaned_data['profile_picture'])
 
     context = {'registration_form': registration_form}
@@ -59,8 +58,26 @@ def logout_handler(request):
     logout(request)
     return redirect(reverse('login'))
 
+
 def ask_handler(request):
-    return render(request, 'ask.html')
+    if (request.method == 'GET'):
+        ask_form = AskForm()
+    
+    if (request.method == 'POST'):  # ? supeuser creation
+        ask_form = AskForm(request.POST)
+        if (ask_form.is_valid()):
+            new_question = ask_form.save(commit=False)
+            new_question.author = request.user.profile
+            new_question.save()
+            tags_list = ask_form.cleaned_data['tags']
+            for tag in tags_list:
+                question_tag = Tag.objects.create_or_get_tag(tag)
+                new_question.tags.add(question_tag)
+            new_question.save()
+            return redirect(reverse('question', args=[new_question.id]))
+
+    context = {'ask_form': ask_form}
+    return render(request, 'ask.html', context)
 
 
 def tag_handler(request, tag_name):

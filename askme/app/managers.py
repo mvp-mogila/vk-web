@@ -10,7 +10,7 @@ class QuestionQuerySet(models.QuerySet):
     def hot(self):
         return self.order_by('-rating')
 
-    def questions_by_tag(self, tag):
+    def questions_by_tag(self, tag: str):
         return self.filter(tags__name=tag)
 
 
@@ -18,7 +18,7 @@ class QuestionManager(models.Manager):
     def get_queryset(self):
         return QuestionQuerySet(model=self.model, using=self._db)
     
-    def get_by_id(self, id):
+    def get_by_id(self, id: int):
         try:
             question = self.get(pk=id)
         except ObjectDoesNotExist:
@@ -39,7 +39,7 @@ class QuestionManager(models.Manager):
             return None
         return hot_questions
 
-    def questions_by_tag(self, tag):
+    def questions_by_tag(self, tag: str):
         try:
             questions = self.get_queryset().questions_by_tag(tag)
         except ObjectDoesNotExist:
@@ -50,10 +50,18 @@ class QuestionManager(models.Manager):
 class TagManager(models.Manager):
     def best_tags(self):
         return self.all().order_by('-rating')
+    
+    def create_or_get_tag(self, tag: str):
+        tag.replace(' ', '')
+        try:
+            tag_obj = self.get(name=tag)
+        except ObjectDoesNotExist:
+            tag_obj = self.create(name=tag)
+        return tag_obj
 
 
 class UserQuerySet(models.QuerySet):   
-    def user_by_username(self, username):
+    def user_by_username(self, username: str):
         return self.get(user__username=username)
 
     def validate_user(self, username, password):
@@ -65,14 +73,14 @@ class UserManager(models.Manager):
     def get_queryset(self):
         return UserQuerySet(model=self.model, using=self._db)
 
-    def user_by_username(self, username):
+    def user_by_username(self, username: str):
         try:
             user = self.get_queryset().user_by_username(username)
         except ObjectDoesNotExist:
             return None
         return user
     
-    def validate_user(self, username, password):
+    def validate_user(self, username, password: str):
         try:
             user = self.get_queryset().validate_user(username, password)
         except ObjectDoesNotExist:

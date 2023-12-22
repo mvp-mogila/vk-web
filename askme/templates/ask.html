@@ -1,18 +1,15 @@
 {% extends 'layouts/base.html' %}
 
+{% load static %}
+{% load django_bootstrap5 %}
+
 {% block content %}
     <div class="col-10 container-fluid">
         <h2 class="text-center">New Question</h2>
         <form method="POST">
-            <label class="fs-2">Title</label>
-            <input type="text" name="question-title" class="form-control">
-        </form>
-        <label class="fs-2">Question</label>
-        <textarea cols="110" rows="20" name="question-text"></textarea>
-        <form>
-            <label class="fs-2">Tags</label>
-            <input type="text" name="question-tags" class="form-control">
-            <input type="submit" value="Ask!" class="btn btn-success mt-3">
+            {% csrf_token %}
+            {% bootstrap_form ask_form %}
+            {% bootstrap_button button_type="submit" button_class="btn btn-success" content="Ask!" %}
         </form>
     </div>
 {% endblock %}
