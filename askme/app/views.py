@@ -1,9 +1,9 @@
-from django.forms import ValidationError
 from django.http import HttpResponseNotFound, Http404
 from django.shortcuts import redirect, render
 from django.core.exceptions import SuspiciousOperation
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from app.models import Question, Profile
@@ -19,6 +19,7 @@ def index_handler(request):
     return render(request, 'index.html', context)
 
 
+# TODO profile_picture
 def signup_handler(request):
     if (request.method == 'GET'):
         registration_form = RegistrationForm()
@@ -53,6 +54,7 @@ def login_handler(request):
     return render(request, 'login.html', context)
 
 
+@login_required
 def logout_handler(request):
     logout(request)
     return redirect(reverse('login'))
