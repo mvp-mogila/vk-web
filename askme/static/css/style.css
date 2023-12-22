@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(228, 204, 176);
+    background-color: rgb(176, 228, 212);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -25,6 +25,7 @@ main {
 
 section {
     border-radius: 20px;
+    border-color: brown;
     text-decoration: none;
     border: 3px solid black;
     margin-right: 50px;

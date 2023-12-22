@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-
 from app import views
 
 
@@ -27,6 +26,7 @@ urlpatterns = [
     path('hot', views.hot_questions_handler, name = "hot"),
     path('signup', views.signup_handler, name = "signup"),
     path('login', views.login_handler, name = "login"),
+    path('logout', views.logout_handler, name = "logout"),
     path('ask', views.ask_handler, name = "ask"),
     path('question/<int:question_id>', views.question_handler, name = "question"),
     path('tag/<str:tag_name>', views.tag_handler, name = "tag"),

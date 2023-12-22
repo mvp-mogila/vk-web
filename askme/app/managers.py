@@ -13,6 +13,7 @@ class QuestionQuerySet(models.QuerySet):
     def questions_by_tag(self, tag):
         return self.filter(tags__name=tag)
 
+
 class QuestionManager(models.Manager):
     def get_queryset(self):
         return QuestionQuerySet(model=self.model, using=self._db)
@@ -51,9 +52,32 @@ class TagManager(models.Manager):
         return self.all().order_by('-rating')
 
 
+class UserQuerySet(models.QuerySet):   
+    def user_by_username(self, username):
+        return self.get(user__username=username)
+
+    def validate_user(self, username, password):
+        return self.get(user__username=username, user__password=password)
+        
+
+
 class UserManager(models.Manager):
-    def best_members(self):
-        return self.all().order_by('-rating')
+    def get_queryset(self):
+        return UserQuerySet(model=self.model, using=self._db)
+
+    def user_by_username(self, username):
+        try:
+            user = self.get_queryset().user_by_username(username)
+        except ObjectDoesNotExist:
+            return None
+        return user
+    
+    def validate_user(self, username, password):
+        try:
+            user = self.get_queryset().validate_user(username, password)
+        except ObjectDoesNotExist:
+            return None
+        return user
 
     # def count_rating(self):
     #     rating = self.reactions__positive.filter(positive = True)
