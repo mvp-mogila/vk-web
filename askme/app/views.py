@@ -101,6 +101,9 @@ def question_handler(request, question_id):
         answer_form = AnswerForm()
     
     if (request.method == 'POST'):
+        if (request.user.is_anonymous):
+            return redirect(reverse('login'))
+
         answer_form = AnswerForm(request.POST)
         if (answer_form.is_valid()):
             new_answer = answer_form.save(commit=False)
