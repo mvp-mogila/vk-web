@@ -66,7 +66,7 @@ def profile_handler(request, username):
             context = {'owner': True, 'profile_form': profile_form, 'profile': profile}
 
         if (request.method == 'POST'):
-            profile_form = ProfileForm(request.POST, instance=request.user)
+            profile_form = ProfileForm(request.POST, request.FILES, instance=request.user)
             if (profile_form.is_valid()):
                 profile_form.save()
                 return redirect(reverse('profile', args=[username]))

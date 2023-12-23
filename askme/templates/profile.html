@@ -30,7 +30,7 @@
                         <div class="list-group-item profile_row">Correct answers:</div>
                         <div class="list-group-item">{{ profile.correct_count }}</div>
                     </div>
-                    <form method="POST" action="{% url 'profile' username=user.username %}">
+                    <form method="POST" action="{% url 'profile' username=user.username %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% bootstrap_form profile_form %}
                         {% bootstrap_button button_type="submit" button_class="btn btn-success mb-5" content="Apply" %}
