@@ -4,6 +4,7 @@ from django.core.exceptions import SuspiciousOperation
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 
 from app.models import Question, Profile, Tag, Answer
@@ -19,6 +20,7 @@ def index_handler(request):
     return render(request, 'index.html', context)
 
 
+@csrf_protect
 def signup_handler(request):
     if (request.method == 'GET'):
         registration_form = RegistrationForm()
@@ -33,6 +35,7 @@ def signup_handler(request):
     return render(request, 'signup.html', context)
 
 
+@csrf_protect
 def login_handler(request):
     if (request.method == 'GET'):
         login_form = LoginForm()
@@ -54,12 +57,14 @@ def login_handler(request):
 
 
 @login_required
+@csrf_protect
 def logout_handler(request):
     logout(request)
     return redirect(reverse('login'))
 
 
 @login_required
+@csrf_protect
 def ask_handler(request):
     if (request.method == 'GET'):
         ask_form = AskForm()
@@ -90,6 +95,7 @@ def tag_handler(request, tag_name):
     return render(request, 'index.html', context)
 
 
+@csrf_protect
 def question_handler(request, question_id):
     page = request.GET.get('page', 1)
     question = Question.objects.get_by_id(question_id)
