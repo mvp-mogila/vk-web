@@ -41,7 +41,11 @@
             <div class="profile container-fluid">
                 <div class="row">
                     <div class="col-6">
-                        <img class="profile_pic" src="{{ profile.profile_pic.url }}" width="350" height="350" alt="profile-pic">
+                        {% if profile.profile_pic %}
+                            <img class="profile_pic" src="{{ profile.profile_pic.url }}" width="350" height="350" alt="profile-pic">
+                        {% else %}
+                            <img class="profile_pic" src="{% static '/img/default-avatar.png' %}" width="350" height="350" alt="profile-pic">
+                        {% endif %}
                         <div class="container">
                             <span class="mt-5 fs-2" style="color: orange">Username:</span>
                             <span class="mt-5 fs-2">{{ profile.user.username }}</span>
