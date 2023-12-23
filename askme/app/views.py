@@ -59,17 +59,18 @@ def login_handler(request):
 
 @csrf_protect
 def profile_handler(request, username):
+    profile = Profile.objects.profile_by_username(username)
     if (request.user.username == username):
         if (request.method == 'GET'):
             profile_form = ProfileForm(initial=model_to_dict(request.user))
-            context = {'owner': True, 'profile_form': profile_form}
+            context = {'owner': True, 'profile_form': profile_form, 'profile': profile}
 
         if (request.method == 'POST'):
             profile_form = ProfileForm(request.POST, instance=request.user)
             if (profile_form.is_valid()):
                 profile_form.save()
+                return redirect(reverse('profile', args=[username]))
     else:
-        profile = Profile.objects.profile_by_username(username)
         context = {'owner': False, 'profile': profile}
 
     return render(request, 'profile.html', context)

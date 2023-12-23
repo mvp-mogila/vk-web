@@ -3,7 +3,11 @@
 <div class="col-10 container-fluid">
     <div class="question-row row bg-light">
         <div class="col-2">
-            <img src="{{ question.author.profile_pic.url }}" class="question-user-avatar">
+            {% if question.author.profile_pic %}
+                <img src="{{ question.author.profile_pic.url }}" class="question-user-avatar">
+            {% else %}
+                <img src="{% static '/img/default-avatar.png' %}" class="question-user-avatar">
+            {% endif %}
             <h5><a href="{% url 'profile' username=question.author.user.username %}" class="text-decoration-none">{{ question.author }}</a></h5>
             <h5>{{ question.time_created }}</h5>
         </div>

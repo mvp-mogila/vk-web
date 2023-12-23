@@ -59,5 +59,10 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = ('first_name', 'last_name',)
 
-    def save(self):
-        user = super().save()
+    def save(self, **kwargs):
+        user = super().save(**kwargs)
+        profile = user.profile
+        if (self.cleaned_data.get('profile_pic')):
+            profile.profile_pic = self.cleaned_data.get('profile_pic')
+            profile.save()
+        return user
