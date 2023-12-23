@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from app.models import Question
+from app.models import Answer, Question
 
 
 class LoginForm(forms.Form):
@@ -31,3 +31,9 @@ class AskForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ('title', 'content', 'tags')
+
+
+class AnswerForm(forms.ModelForm):
+    class Meta:
+        model = Answer
+        fields = ('content',)

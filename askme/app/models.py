@@ -18,6 +18,9 @@ class Question(models.Model):
 
     objects = QuestionManager()
 
+    class Meta:
+        ordering = ['-time_created']
+
     def __str__(self) -> str:
         return self.title
         

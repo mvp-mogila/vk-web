@@ -6,8 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from app.models import Question, Profile, Tag
-from app.forms import LoginForm, RegistrationForm, AskForm
+from app.models import Question, Profile, Tag, Answer
+from app.forms import LoginForm, RegistrationForm, AskForm, AnswerForm
 
 
 def index_handler(request):
@@ -59,11 +59,12 @@ def logout_handler(request):
     return redirect(reverse('login'))
 
 
+@login_required
 def ask_handler(request):
     if (request.method == 'GET'):
         ask_form = AskForm()
     
-    if (request.method == 'POST'):  # ? supeuser creation
+    if (request.method == 'POST'): # ? superuser creation
         ask_form = AskForm(request.POST)
         if (ask_form.is_valid()):
             new_question = ask_form.save(commit=False)
@@ -95,7 +96,21 @@ def question_handler(request, question_id):
     if (not question):
         return HttpResponseNotFound()
     answers = question.answer.all()
-    context = {'question': question, 'objects': paginate(answers, page)}
+    
+    if (request.method == 'GET'):
+        answer_form = AnswerForm()
+    
+    if (request.method == 'POST'):
+        answer_form = AnswerForm(request.POST)
+        if (answer_form.is_valid()):
+            new_answer = answer_form.save(commit=False)
+            new_answer.author = request.user.profile
+            new_answer.question = question
+            new_answer.save()
+            new_page = Paginator(question.answer.all(), 3).num_pages
+            return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
+
+    context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form}
     return render(request, 'question.html', context)
 
 

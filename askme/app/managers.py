@@ -52,7 +52,7 @@ class TagManager(models.Manager):
         return self.all().order_by('-rating')
     
     def create_or_get_tag(self, tag: str):
-        tag.replace(' ', '')
+        tag = ''.join(tag.split())
         try:
             tag_obj = self.get(name=tag)
         except ObjectDoesNotExist:

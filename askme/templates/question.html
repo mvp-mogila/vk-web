@@ -1,5 +1,8 @@
 {% extends 'layouts/base.html' %}
 
+{% load static %}
+{% load django_bootstrap5 %}
+
 {% block content %}
     <h2 class="text-center">Question</h2>
     {% include 'components/question-item.html' %}
@@ -15,12 +18,13 @@
         {% endif %}
     {% endif %}
     <div class="col-9 container-fluid">
-        <div class="answer row">
-            <h2 class="text-center">Your Answer</h2>
-            <textarea cols="80" rows="5" name="answer-text"></textarea>
-            <div class="col-1">
-                <input type="button" value="Comment!" class="btn btn-success m-2">
+        <form method="POST" action="{% url 'question' question_id=question.id %}">
+            <div class="answer row">
+                <h2 class="text-center">Your Answer</h2>
+                {% csrf_token %}
+                {% bootstrap_form answer_form %}
             </div>
-        </div>
+            {% bootstrap_button button_type="submit" button_class="btn btn-success mb-5" content="Answer!" %}
+        </form>
     </div>
 {% endblock %}
