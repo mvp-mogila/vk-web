@@ -72,14 +72,7 @@ def ask_handler(request):
     if (request.method == 'POST'): # ? superuser creation
         ask_form = AskForm(request.POST)
         if (ask_form.is_valid()):
-            new_question = ask_form.save(commit=False)
-            new_question.author = request.user.profile
-            new_question.save()
-            tags_list = ask_form.cleaned_data['tags']
-            for tag in tags_list:
-                question_tag = Tag.objects.create_or_get_tag(tag)
-                new_question.tags.add(question_tag)
-            new_question.save()
+            new_question = ask_form.save(request.user.profile)
             return redirect(reverse('question', args=[new_question.id]))
 
     context = {'ask_form': ask_form}
@@ -112,10 +105,7 @@ def question_handler(request, question_id):
 
         answer_form = AnswerForm(request.POST)
         if (answer_form.is_valid()):
-            new_answer = answer_form.save(commit=False)
-            new_answer.author = request.user.profile
-            new_answer.question = question
-            new_answer.save()
+            answer_form.save(request.user.profile, question)
             new_page = Paginator(question.answer.all(), 3).num_pages
             return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
 
