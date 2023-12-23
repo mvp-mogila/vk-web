@@ -43,9 +43,21 @@ textarea {
     border: 3px solid black;
 }
 
-.question-user-avatar, .answer-user-avatar {
+.question-user-avatar {
     max-width: 120px;
     max-height: 120px;
+    margin-top: 5px;
+}
+
+.answer-user-avatar {
+    max-width: 100px;
+    max-height: 100px;
+    margin-top: 5px;
+}
+
+.profile_pic, .answer-user-avatar, .question-user-avatar {
+    border: 2px solid black;
+    border-radius: 20px;
 }
 
 .question-row, .answer-row {
@@ -61,4 +73,15 @@ textarea {
 .correct-answer-icon {
     max-width: 40px;
     max-height: 40px;
+}
+
+.profile_row {
+    color: rgb(248, 165, 69);
+    background-color: rgb(255, 245, 232);
+}
+
+.profile_list {
+    border-radius: 10px;
+    border: 3px solid black;
+    margin-bottom: 20px;
 }

@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from django.http import HttpResponseNotFound, Http404
 from django.shortcuts import redirect, render
 from django.core.exceptions import SuspiciousOperation
@@ -8,7 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 
 from app.models import Question, Profile, Tag, Answer
-from app.forms import LoginForm, RegistrationForm, AskForm, AnswerForm
+from app.forms import LoginForm, ProfileForm, RegistrationForm, AskForm, AnswerForm
 
 
 def index_handler(request):
@@ -54,6 +55,24 @@ def login_handler(request):
 
     context = {'login_form': login_form, 'error': error}
     return render(request, 'login.html', context)
+
+
+@csrf_protect
+def profile_handler(request, username):
+    if (request.user.username == username):
+        if (request.method == 'GET'):
+            profile_form = ProfileForm(initial=model_to_dict(request.user))
+            context = {'owner': True, 'profile_form': profile_form}
+
+        if (request.method == 'POST'):
+            profile_form = ProfileForm(request.POST, instance=request.user)
+            if (profile_form.is_valid()):
+                profile_form.save()
+    else:
+        profile = Profile.objects.profile_by_username(username)
+        context = {'owner': False, 'profile': profile}
+
+    return render(request, 'profile.html', context)
 
 
 @login_required

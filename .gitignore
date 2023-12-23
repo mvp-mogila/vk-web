@@ -130,6 +130,7 @@ dmypy.json
 cython_debug/
 
 askme/__pycache__
+askme/uploads
 
 .vscode
 askme/app/migrations

@@ -3,8 +3,8 @@
 <div class="col-10 container-fluid">
     <div class="question-row row bg-light">
         <div class="col-2">
-            <img src="{% static '/img/default-avatar.png' %}" class="question-user-avatar">
-            <h5><a href="" class="text-decoration-none">{{ question.author }}</a></h5>
+            <img src="{{ question.author.profile_pic.url }}" class="question-user-avatar">
+            <h5><a href="{% url 'profile' username=question.author.user.username %}" class="text-decoration-none">{{ question.author }}</a></h5>
             <h5>{{ question.time_created }}</h5>
         </div>
         <div class="col-9 fs-5">
@@ -15,7 +15,9 @@
             <div class="row position-bottom fs-6">
                 <div class="col-12 text-end">
                     {% for tag in question.tags.all %}
-                        <a href="{% url 'tag' tag_name=tag %}">{{ tag }}</a>
+                        {% if tag.exists %}
+                            <a href="{% url 'tag' tag_name=tag %}">{{ tag }}</a>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

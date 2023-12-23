@@ -60,32 +60,22 @@ class TagManager(models.Manager):
         return tag_obj
 
 
-class UserQuerySet(models.QuerySet):   
-    def user_by_username(self, username: str):
-        return self.get(user__username=username)
-
-    def validate_user(self, username, password):
-        return self.get(user__username=username, user__password=password)
-        
+class ProfileQuerySet(models.QuerySet):   
+    def profile_by_username(self, username: str):
+        return self.get(user__username=username)      
 
 
-class UserManager(models.Manager):
+class ProfileManager(models.Manager):
     def get_queryset(self):
-        return UserQuerySet(model=self.model, using=self._db)
+        return ProfileQuerySet(model=self.model, using=self._db)
 
-    def user_by_username(self, username: str):
+    def profile_by_username(self, username: str):
         try:
-            user = self.get_queryset().user_by_username(username)
+            user = self.get_queryset().profile_by_username(username)
         except ObjectDoesNotExist:
             return None
         return user
     
-    def validate_user(self, username, password: str):
-        try:
-            user = self.get_queryset().validate_user(username, password)
-        except ObjectDoesNotExist:
-            return None
-        return user
 
     # def count_rating(self):
     #     rating = self.reactions__positive.filter(positive = True)

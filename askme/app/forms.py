@@ -15,7 +15,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'profile_picture')
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2',)
 
 
 class AskForm(forms.ModelForm):
@@ -30,7 +30,7 @@ class AskForm(forms.ModelForm):
 
     class Meta:
         model = Question
-        fields = ('title', 'content', 'tags')
+        fields = ('title', 'content',)
 
     def save(self, author):
         new_question = Question.objects.create(author=author, title=self.cleaned_data['title'], content=self.cleaned_data['content'])
@@ -50,3 +50,14 @@ class AnswerForm(forms.ModelForm):
     def save(self, author, question):
         new_answer = Answer.objects.create(author=author, question=question, **self.cleaned_data)
         return new_answer
+    
+
+class ProfileForm(forms.ModelForm):
+    profile_pic = forms.ImageField(required=False)
+    
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name',)
+
+    def save(self):
+        user = super().save()

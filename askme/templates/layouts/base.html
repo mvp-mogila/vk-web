@@ -40,8 +40,8 @@
                     <ul class="user-section navbar-nav mb-auto justify-content-end col-5">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a href="profile.html" class="nav-link">{{ user.username }}
-                                    <img src="{{ user.profile_pic }}" width="31" height="31">
+                                <a href="{% url 'profile' username=user.username %}" class="nav-link">{{ user.username }}
+                                    <img src="{{ user.profile.profile_pic.url }}" width="31" height="31">
                                 </a>
                             </li>
                             <li class="nav-item">

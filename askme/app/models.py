@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
-from app.managers import QuestionManager, TagManager, UserManager
+from app.managers import QuestionManager, TagManager, ProfileManager
 
 
 class Question(models.Model):
@@ -52,7 +52,7 @@ class Tag(models.Model):
 
 
 class Profile(models.Model):
-    profile_pic = models.ImageField(blank=True, null=True, upload_to='../uploads')
+    profile_pic = models.ImageField(blank=True, null=True, default='default-avatar.png', upload_to='avatar/%Y/%m/%d')
     rating = models.IntegerField(default=0)
     question_count = models.IntegerField(default=0)
     answer_count = models.IntegerField(default=0)
@@ -60,7 +60,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
-    objects = UserManager()
+    objects = ProfileManager()
 
     def __str__(self) -> str:
         return self.user.username
