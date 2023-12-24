@@ -30,7 +30,11 @@ function answer_vote(answer_id, positive, rating) {
     fetch(request)
         .then((response) => response.json())
         .then((data) => {
-            rating.innerHTML = data.rating;
+            if (data.error == 1) {
+                alert(data.message);
+            } else {
+                rating.innerHTML = data.rating;
+            }
         });
 }
 
@@ -59,7 +63,11 @@ function question_vote(question_id, positive, rating) {
     fetch(request)
         .then((response) => response.json())
         .then((data) => {
-            rating.innerHTML = data.rating;
+            if (data.error == 1) {
+                alert(data.message);
+            } else {
+                rating.innerHTML = data.rating;
+            }
         });
 }
 

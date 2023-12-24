@@ -132,35 +132,39 @@ def question_handler(request, question_id):
             author.add_answer()
             new_page = Paginator(question.answer.all(), 3).num_pages
             return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
-    print(question)
+
     context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form}
     return render(request, 'question.html', context)
 
 
 @csrf_protect
-@login_required
 def answer_vote_handler(request):
+    if (request.user.is_anonymous):
+        return JsonResponse({'error': 1, 'message': 'You have to login for voting!'})
+    
     answer_id = request.POST.get('answer_id')
     positive = request.POST.get('positive')
     answer = get_object_or_404(Answer, id=answer_id)
     if (answer.author != request.user.profile):
         rating = Reaction.objects.add_reaction(author=request.user.profile, object=answer, positive=positive)
     else:
-        rating = answer.rating
-    return JsonResponse({'rating': rating})
+        return JsonResponse({'error': 1, 'message': 'You can\'t rate self-created objects!'})
+    return JsonResponse({'error': 0, 'rating': rating})
 
 
 @csrf_protect
-@login_required
 def question_vote_handler(request):
+    if (request.user.is_anonymous):
+        return JsonResponse({'error': 1, 'message': 'You have to login for voting!'})
+    
     question_id = request.POST.get('question_id')
     positive = request.POST.get('positive')
     question = get_object_or_404(Question, id=question_id)
     if (question.author != request.user.profile):
         rating = Reaction.objects.add_reaction(author=request.user.profile, object=question, positive=positive)
     else:
-        rating = question.rating
-    return JsonResponse({'rating': rating})
+        return JsonResponse({'error': 1, 'message': 'You can\'t rate self-created objects!'})
+    return JsonResponse({'error': 0, 'rating': rating})
 
 
 def new_questions_handler(request):
