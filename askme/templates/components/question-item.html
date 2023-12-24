@@ -27,9 +27,10 @@
             </div>
         </div>
         <div class="like-section col-1">
-            <input type="button" value="ⴷ" class="like btn btn-outline-success btn-sm mt-3 rounded-5" name="like">
+            {% csrf_token %}
+            <input type="button" value="ⴷ" class="like btn btn-outline-success btn-sm mt-3 rounded-5" name="like" data-id="{{ question.id }}">
             <div class="rating">{{ question.rating }}</div>
-            <input type="button" value="V" class="dislike btn btn-outline-danger btn-sm rounded-5" name="dislike">
+            <input type="button" value="V" class="dislike btn btn-outline-danger btn-sm rounded-5" name="dislike" data-id="{{ question.id }}">
         </div>
     </div>
 </div>

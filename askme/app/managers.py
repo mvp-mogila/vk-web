@@ -46,6 +46,20 @@ class QuestionManager(models.Manager):
             return None
         return questions
 
+    def count_rating(self):
+        rating = self.reactions__positive.filter(positive = True)
+        rating -= self.reactions__positive.filter(positive = False)
+        self.rating = rating
+        return rating
+
+
+class AnswerManager(models.Manager):
+    def count_rating(self):
+        rating = self.reactions__positive.filter(positive = True)
+        rating -= self.reactions__positive.filter(positive = False)
+        self.rating = rating
+        return rating
+
 
 class TagManager(models.Manager):
     def best_tags(self):
@@ -76,20 +90,34 @@ class ProfileManager(models.Manager):
             return None
         return user
     
+    def count_rating(self) -> int:
+        rating = self.reaction__positive.filter(positive = True)
+        rating -= self.reaction__positive.filter(positive = False)
+        self.rating = rating
+        return rating
 
-    # def count_rating(self):
-    #     rating = self.reactions__positive.filter(positive = True)
-    #     rating -= self.reactions__positive.filter(positive = False)
-    #     return rating
 
+class ReactionManager(models.Manager):
+    def add_reaction(self, author, object, positive: bool):
+        obj_type = ContentType.objects.get_for_model(object)
+        try:
+            reaction = self.get(author=author, content_type=obj_type, object_id=object.id)
 
-# class ReactionManager(models.Manager):
-#     def add_reaction(self, obj, user, reaction_type):
-#         obj_type = ContentType.objects.get_for_model(obj)
-#         reaction = self.create(content_type=obj_type, object_id=obj.id, user=user, positive=reaction_type)
-#         return reaction
+            print('exist')
+            if (reaction.positive != positive):
+                reaction.delete()
+                self.create(author=author, positive=bool(positive), content_type=obj_type, object_id=object.id)
+                object.author.delete_vote(reaction.positive)
+                object.author.add_vote(positive)
+                object.delete_vote(reaction.positive)
+                object.add_vote(positive)
+                
+        except ObjectDoesNotExist:
+            print('new')
+            self.create(author=author, positive=bool(positive), content_type=obj_type, object_id=object.id)
+            object.author.add_vote(positive)
+            object.author.add_vote(positive)
 
-#     def voted(self, obj, user) -> bool:
-#         obj_type = ContentType.objects.get_for_model(obj)
-#         reactions = self.filter(content_type=obj_type, object_id=obj.id, user=user)
-#         return reactions.exists()
+        return object.rating
+        
+  

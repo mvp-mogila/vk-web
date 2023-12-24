@@ -23,6 +23,20 @@ class Question(models.Model):
 
     def __str__(self) -> str:
         return self.title
+    
+    def add_vote(self, positive: bool):
+        if (positive):
+            self.rating += 1
+        else:
+            self.rating -= 1
+        self.save()
+    
+    def delete_vote(self, positive: bool):
+        if (positive):
+            self.rating -= 1
+        else:
+            self.rating += 1
+        self.save()
         
 
 class Answer(models.Model):
@@ -39,6 +53,20 @@ class Answer(models.Model):
 
     class Meta:
         ordering = ['-rating']
+
+    def add_vote(self, positive: bool):
+        if (positive):
+            self.rating += 1
+        else:
+            self.rating -= 1
+        self.save()
+    
+    def delete_vote(self, positive: bool):
+        if (positive):
+            self.rating -= 1
+        else:
+            self.rating += 1
+        self.save()
 
 
 class Tag(models.Model):
@@ -71,6 +99,20 @@ class Profile(models.Model):
 
     def add_answer(self):
         self.answer_count += 1
+        self.save()
+
+    def add_vote(self, positive: bool):
+        if (positive):
+            self.rating += 1
+        else:
+            self.rating -= 1
+        self.save()
+    
+    def delete_vote(self, positive: bool):
+        if (positive):
+            self.rating -= 1
+        else:
+            self.rating += 1
         self.save()
 
 

@@ -18,10 +18,11 @@
             {% if answer.correct %}
                 <img src="{% static '/img/correct.png' %}" class="correct-answer-icon mt-2">
             {% endif %}
-            <div class="like-section col-1">
-                <input type="button" value="ⴷ" class="like btn btn-outline-success btn-sm mt-3 rounded-5" name="like">
+            <div class="answer-like-section col-1">
+                {% csrf_token %}
+                <input type="button" value="ⴷ" class="like btn btn-outline-success btn-sm mt-3 rounded-5" name="like" data-id="{{ answer.id }}">
                 <div class="rating">{{ answer.rating }}</div>
-                <input type="button" value="V" class="dislike btn btn-outline-danger btn-sm rounded-5" name="dislike">
+                <input type="button" value="V" class="dislike btn btn-outline-danger btn-sm rounded-5" name="dislike" data-id="{{ answer.id }}">
             </div>
         </div>
     </div>

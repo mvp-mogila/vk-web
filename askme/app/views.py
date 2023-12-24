@@ -143,8 +143,7 @@ def answer_vote_handler(request):
     answer_id = request.POST.get('answer_id')
     positive = request.POST.get('positive')
     answer = get_object_or_404(Answer, id=answer_id)
-    Reaction.objects.add_reaction(author=request.user.profile, object=answer, positive=positive)
-    rating = answer.count_rating()
+    rating = Reaction.objects.add_reaction(author=request.user.profile, object=answer, positive=positive)
     return JsonResponse({'rating': rating})
 
 
