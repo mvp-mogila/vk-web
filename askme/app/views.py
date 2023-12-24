@@ -1,6 +1,6 @@
 from django.forms import model_to_dict
-from django.http import HttpResponseNotFound, Http404
-from django.shortcuts import redirect, render
+from django.http import HttpResponseNotFound, Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import SuspiciousOperation
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 
-from app.models import Question, Profile, Tag, Answer
+from app.models import Question, Profile, Reaction, Tag, Answer
 from app.forms import LoginForm, ProfileForm, RegistrationForm, AskForm, AnswerForm
 
 
@@ -92,7 +92,9 @@ def ask_handler(request):
     if (request.method == 'POST'): # ? superuser creation
         ask_form = AskForm(request.POST)
         if (ask_form.is_valid()):
-            new_question = ask_form.save(request.user.profile)
+            author = request.user.profile
+            new_question = ask_form.save(author)
+            author.add_question()
             return redirect(reverse('question', args=[new_question.id]))
 
     context = {'ask_form': ask_form}
@@ -125,12 +127,25 @@ def question_handler(request, question_id):
 
         answer_form = AnswerForm(request.POST)
         if (answer_form.is_valid()):
-            answer_form.save(request.user.profile, question)
+            author = request.user.profile
+            answer_form.save(author, question)
+            author.add_answer()
             new_page = Paginator(question.answer.all(), 3).num_pages
             return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
 
     context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form}
     return render(request, 'question.html', context)
+
+
+@csrf_protect
+@login_required
+def answer_vote_handler(request):
+    answer_id = request.POST.get('answer_id')
+    positive = request.POST.get('positive')
+    answer = get_object_or_404(Answer, id=answer_id)
+    Reaction.objects.add_reaction(author=request.user.profile, object=answer, positive=positive)
+    rating = answer.count_rating()
+    return JsonResponse({'rating': rating})
 
 
 def new_questions_handler(request):

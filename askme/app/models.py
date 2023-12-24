@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
-from app.managers import QuestionManager, TagManager, ProfileManager
+from app.managers import QuestionManager, TagManager, ProfileManager, ReactionManager, AnswerManager
 
 
 class Question(models.Model):
@@ -35,7 +35,7 @@ class Answer(models.Model):
     question = models.ForeignKey('Question', on_delete=models.CASCADE, related_name='answer')
     reactions = GenericRelation('Reaction', related_name='answer')
 
-    # TODO: objects = Answermanager()
+    objects = AnswerManager()
 
     class Meta:
         ordering = ['-rating']
@@ -64,6 +64,14 @@ class Profile(models.Model):
 
     def __str__(self) -> str:
         return self.user.username
+    
+    def add_question(self):
+        self.question_count += 1
+        self.save()
+
+    def add_answer(self):
+        self.answer_count += 1
+        self.save()
 
 
 class Reaction(models.Model):
@@ -76,7 +84,7 @@ class Reaction(models.Model):
     object_id = models.IntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
-    # TODO objects = ReactionManager()
+    objects = ReactionManager()
 
     def __str__(self) -> str:
         return str(self.positive)
