@@ -59,7 +59,7 @@ class AnswerManager(models.Manager):
         rating -= self.reactions__positive.filter(positive = False)
         self.rating = rating
         return rating
-
+    
 
 class TagManager(models.Manager):
     def best_tags(self):

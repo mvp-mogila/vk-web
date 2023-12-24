@@ -38,7 +38,7 @@ function answer_vote(answer_id, positive, rating) {
         });
 }
 
-const answerItems = document.getElementsByClassName('answer-like-section')
+const answerItems = document.getElementsByClassName('answer-like-section');
 
 for (let answerItem of answerItems) {
     const [, like, rating, dislike] = answerItem.children;
@@ -71,7 +71,7 @@ function question_vote(question_id, positive, rating) {
         });
 }
 
-const questionItems = document.getElementsByClassName('question-like-section')
+const questionItems = document.getElementsByClassName('question-like-section');
 
 for (let questionItem of questionItems) {
     const [, like, rating, dislike] = questionItem.children;

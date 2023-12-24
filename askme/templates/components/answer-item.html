@@ -17,6 +17,11 @@
         <div class="col-1">
             {% if answer.correct %}
                 <img src="{% static '/img/correct.png' %}" class="correct-answer-icon mt-2">
+            {% elif owner %}
+                <div class="not-correct">
+                    {% csrf_token %}
+                    <input type="button" value="correct" class="correct btn btn-outline-success btn-sm mt-3 rounded-5" data-id="{{ answer.id }}">
+                </div>
             {% endif %}
             <div class="answer-like-section col-1">
                 {% csrf_token %}

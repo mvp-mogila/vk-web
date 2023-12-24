@@ -118,6 +118,11 @@ def question_handler(request, question_id):
         return HttpResponseNotFound()
     answers = question.answer.all()
     
+    if (not request.user.is_anonymous and request.user.profile == question.author):
+        owner = True
+    else:
+        owner = False
+
     if (request.method == 'GET'):
         answer_form = AnswerForm()
     
@@ -133,7 +138,7 @@ def question_handler(request, question_id):
             new_page = Paginator(question.answer.all(), 3).num_pages
             return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
 
-    context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form}
+    context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form, 'owner': owner}
     return render(request, 'question.html', context)
 
 
@@ -165,6 +170,18 @@ def question_vote_handler(request):
     else:
         return JsonResponse({'error': 1, 'message': 'You can\'t rate self-created objects!'})
     return JsonResponse({'error': 0, 'rating': rating})
+
+
+@csrf_protect
+def answer_correct(request):
+    if (request.user.is_anonymous):
+        return JsonResponse({'error': 1, 'message': 'You have to login to mark answers!'})
+    
+    answer_id = request.POST.get('answer_id')
+    answer = get_object_or_404(Answer, id=answer_id)
+    errmessage = answer.mark_correct()
+    return JsonResponse({'error': 0, 'message': errmessage})
+
 
 
 def new_questions_handler(request):

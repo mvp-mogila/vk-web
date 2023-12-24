@@ -19,7 +19,7 @@ class Question(models.Model):
     objects = QuestionManager()
 
     class Meta:
-        ordering = ['-time_created']
+        ordering = ['-time_created', '-rating']
 
     def __str__(self) -> str:
         return self.title
@@ -52,7 +52,7 @@ class Answer(models.Model):
     objects = AnswerManager()
 
     class Meta:
-        ordering = ['-rating']
+        ordering = ['-correct', '-rating', '-time_created']
 
     def add_vote(self, positive: bool):
         if (positive):
@@ -67,6 +67,15 @@ class Answer(models.Model):
         else:
             self.rating += 1
         self.save()
+
+    def mark_correct(self) -> str:
+        if (self.correct):
+            return 'This answer is already marked'
+        else:
+            self.correct = True
+            self.save()
+            self.author.add_correct()
+            return 'Ok'
 
 
 class Tag(models.Model):
@@ -113,6 +122,10 @@ class Profile(models.Model):
             self.rating -= 1
         else:
             self.rating += 1
+        self.save()
+    
+    def add_correct(self):
+        self.correct_count += 1
         self.save()
 
 
