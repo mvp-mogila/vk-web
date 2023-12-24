@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="like-section col-1">
+        <div class="question-like-section col-1">
             {% csrf_token %}
             <input type="button" value="ⴷ" class="like btn btn-outline-success btn-sm mt-3 rounded-5" name="like" data-id="{{ question.id }}">
             <div class="rating">{{ question.rating }}</div>

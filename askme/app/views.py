@@ -147,6 +147,16 @@ def answer_vote_handler(request):
     return JsonResponse({'rating': rating})
 
 
+@csrf_protect
+@login_required
+def question_vote_handler(request):
+    question_id = request.POST.get('question_id')
+    positive = request.POST.get('positive')
+    question = get_object_or_404(Question, id=question_id)
+    rating = Reaction.objects.add_reaction(author=request.user.profile, object=question, positive=positive)
+    return JsonResponse({'rating': rating})
+
+
 def new_questions_handler(request):
     page = request.GET.get('page', 1)
     questions = Question.objects.new()

@@ -33,6 +33,7 @@ urlpatterns = [
     path('ask', views.ask_handler, name = "ask"),
     path('question/<int:question_id>', views.question_handler, name = "question"),
     path('answer/vote', views.answer_vote_handler, name = "answer_vote"),
+    path('question/vote', views.question_vote_handler, name = "question_vote"),
     path('tag/<str:tag_name>', views.tag_handler, name = "tag"),
     path('admin/', admin.site.urls, name = "admin"),
 ]

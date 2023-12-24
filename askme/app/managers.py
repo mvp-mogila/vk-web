@@ -98,25 +98,27 @@ class ProfileManager(models.Manager):
 
 
 class ReactionManager(models.Manager):
-    def add_reaction(self, author, object, positive: bool):
+    def add_reaction(self, author, object, positive):
+        if (positive == 'true'):
+            positive = True
+        else:
+            positive = False
+
         obj_type = ContentType.objects.get_for_model(object)
         try:
             reaction = self.get(author=author, content_type=obj_type, object_id=object.id)
-
-            print('exist')
+            object.author.delete_vote(reaction.positive)
+            object.delete_vote(reaction.positive)
+            reaction.delete()
             if (reaction.positive != positive):
-                reaction.delete()
-                self.create(author=author, positive=bool(positive), content_type=obj_type, object_id=object.id)
-                object.author.delete_vote(reaction.positive)
+                self.create(author=author, positive=positive, content_type=obj_type, object_id=object.id)
                 object.author.add_vote(positive)
-                object.delete_vote(reaction.positive)
                 object.add_vote(positive)
-                
+
         except ObjectDoesNotExist:
-            print('new')
-            self.create(author=author, positive=bool(positive), content_type=obj_type, object_id=object.id)
+            self.create(author=author, positive=positive, content_type=obj_type, object_id=object.id)
             object.author.add_vote(positive)
-            object.author.add_vote(positive)
+            object.add_vote(positive)
 
         return object.rating
         

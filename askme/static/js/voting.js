@@ -13,63 +13,60 @@ function getCookie(name) {
     return cookieValue;
 }
 
+
+function answer_vote(answer_id, positive, rating) {
+    const formData = new FormData()
+    formData.append('answer_id', answer_id)
+    formData.append('positive', positive)
+
+    const request = new Request('/answer/vote', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        }
+    });
+
+    fetch(request)
+        .then((response) => response.json())
+        .then((data) => {
+            rating.innerHTML = data.rating;
+        });
+}
+
 const answerItems = document.getElementsByClassName('answer-like-section')
-
-// for (let answerItem in answerItems) {
-//     answerItem.onclick = function (event) {
-//         console.log('QQQQ')
-//         event.preventDefault();
-//         const element = event.target;
-
-//         if (element.nodeName === 'like' || element.nodeName === 'dislike') {
-//             const formData = new FormData()
-//             formData.append('answer_id', like.dataset.id)
-
-            
-
-//             if (element.nodeName === 'like') {
-//                 formData.append('positive', true)
-//             } else {
-//                 formData.append('positive', false)
-//             }
-
-//             const request = new Request('/answer/vote/', {
-//                 method: 'POST',
-//                 body: formData,
-//                 headers: {
-//                     'X-CSRFToken': getCookie('csrftoken'),
-//                 }
-//             });
-
-//             fetch(request)
-//                 .then((response) => response.json())
-//                 .then((data) => {
-//                     rating.innerHTML = data.rating;
-//                 });
-//         }
-//     }
-// }
 
 for (let answerItem of answerItems) {
     const [, like, rating, dislike] = answerItem.children;
-    console.log(like)
-    like.addEventListener('click', () => {
-        const formData = new FormData()
-        formData.append('answer_id', like.dataset.id)
-        formData.append('positive', true)
+    like.addEventListener('click', (event) => answer_vote(like.dataset.id, true, rating), once=true);
+    dislike.addEventListener('click', (event) => answer_vote(dislike.dataset.id, false, rating), once=true);
+}
 
-        const request = new Request('/answer/vote', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-            }
+
+function question_vote(question_id, positive, rating) {
+    const formData = new FormData()
+    formData.append('question_id', question_id)
+    formData.append('positive', positive)
+
+    const request = new Request('/question/vote', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        }
+    });
+
+    fetch(request)
+        .then((response) => response.json())
+        .then((data) => {
+            rating.innerHTML = data.rating;
         });
+}
 
-        fetch(request)
-            .then((response) => response.json())
-            .then((data) => {
-                rating.innerHTML = data.rating;
-            });
-    })
+const questionItems = document.getElementsByClassName('question-like-section')
+
+for (let questionItem of questionItems) {
+    const [, like, rating, dislike] = questionItem.children;
+    like.addEventListener('click', (event) => question_vote(like.dataset.id, true, rating), once=true);
+    dislike.addEventListener('click', (event) => question_vote(dislike.dataset.id, false, rating), once=true);
 }
