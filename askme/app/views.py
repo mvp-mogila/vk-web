@@ -132,7 +132,7 @@ def question_handler(request, question_id):
             author.add_answer()
             new_page = Paginator(question.answer.all(), 3).num_pages
             return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
-
+    print(question)
     context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form}
     return render(request, 'question.html', context)
 
@@ -143,7 +143,10 @@ def answer_vote_handler(request):
     answer_id = request.POST.get('answer_id')
     positive = request.POST.get('positive')
     answer = get_object_or_404(Answer, id=answer_id)
-    rating = Reaction.objects.add_reaction(author=request.user.profile, object=answer, positive=positive)
+    if (answer.author != request.user.profile):
+        rating = Reaction.objects.add_reaction(author=request.user.profile, object=answer, positive=positive)
+    else:
+        rating = answer.rating
     return JsonResponse({'rating': rating})
 
 
@@ -153,7 +156,10 @@ def question_vote_handler(request):
     question_id = request.POST.get('question_id')
     positive = request.POST.get('positive')
     question = get_object_or_404(Question, id=question_id)
-    rating = Reaction.objects.add_reaction(author=request.user.profile, object=question, positive=positive)
+    if (question.author != request.user.profile):
+        rating = Reaction.objects.add_reaction(author=request.user.profile, object=question, positive=positive)
+    else:
+        rating = question.rating
     return JsonResponse({'rating': rating})
 
 
