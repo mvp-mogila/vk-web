@@ -24,6 +24,8 @@ def app(environ, start_response):
     start_response("200 OK", [("Content-Type", "text/plain"),("Content-Length", str(len(data)))])
     return iter([data])
 
+application = app
+
 # ! gunicorn -w 2 -b 127.0.0.1:8081 test_wsgi:app
 
 # * GET
