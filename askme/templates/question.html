@@ -5,7 +5,7 @@
 
 {% block content %}
     <h2 class="text-center">Question</h2>
-    {% include 'components/question-item.html' %}
+    {% comment %} {% include 'components/question-item.html' %}
     <h2 class="text-center">Answers</h2>
     {% if not objects %}
         <h4 class="text-center">No answers for this question</h3>
@@ -26,5 +26,35 @@
             </div>
             {% bootstrap_button button_type="submit" button_class="btn btn-success mb-5" content="Answer!" %}
         </form>
-    </div>
+    </div> {% endcomment %}
+    <div id="counter">-</div>
+  <script src="https://unpkg.com/centrifuge@5.0.1/dist/centrifuge.js"></script>
+  <script type="text/javascript">
+    const container = document.getElementById('counter');
+
+    const centrifuge = new Centrifuge("{{ centrifugo.ws_url }}", {
+      token: "{{ centrifugo.token }}"
+    });
+
+    centrifuge.on('connecting', function (ctx) {
+      console.log(`connecting: ${ctx.code}, ${ctx.reason}`);
+    }).on('connected', function (ctx) {
+      console.log(`connected over ${ctx.transport}`);
+    }).on('disconnected', function (ctx) {
+      console.log(`disconnected: ${ctx.code}, ${ctx.reason}`);
+    }).connect();
+
+    const sub = centrifuge.newSubscription("channel");
+
+    sub.on('publication', function (ctx) {
+      container.innerHTML = ctx.data.value;
+      document.title = ctx.data.value;
+    }).on('subscribing', function (ctx) {
+      console.log(`subscribing: ${ctx.code}, ${ctx.reason}`);
+    }).on('subscribed', function (ctx) {
+      console.log('subscribed', ctx);
+    }).on('unsubscribed', function (ctx) {
+      console.log(`unsubscribed: ${ctx.code}, ${ctx.reason}`);
+    }).subscribe();
+  </script>
 {% endblock %}

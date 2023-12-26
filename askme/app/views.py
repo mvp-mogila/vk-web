@@ -10,6 +10,7 @@ from django.urls import reverse
 
 from app.models import Question, Profile, Reaction, Answer
 from app.forms import LoginForm, ProfileForm, RegistrationForm, AskForm, AnswerForm
+from app.services import get_centrifugo_data
 
 
 def index_handler(request):
@@ -17,7 +18,6 @@ def index_handler(request):
     questions = Question.objects.new()
     if (not questions):
         return HttpResponseNotFound()
-    print(1)
     context = {'title': 'New questions', 'objects': paginate(questions, page)}
     return render(request, 'index.html', context)
 
@@ -143,7 +143,9 @@ def question_handler(request, question_id):
             new_page = Paginator(question.answer.all(), 3).num_pages
             return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
 
-    context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form, 'owner': owner}
+    if (request.user.id):
+        centrifugo = get_centrifugo_data(request.user.id)
+    context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form, 'owner': owner, **centrifugo}
     return render(request, 'question.html', context)
 
 
@@ -190,7 +192,6 @@ def answer_correct(request):
 
 
 def new_questions_handler(request):
-    print(2)
     page = request.GET.get('page', 1)
     questions = Question.objects.new()
     if (not questions):
@@ -200,7 +201,6 @@ def new_questions_handler(request):
 
 
 def hot_questions_handler(request):
-    print(3)
     page = request.GET.get('page', 1)
     questions = Question.objects.hot()
     if (not questions):

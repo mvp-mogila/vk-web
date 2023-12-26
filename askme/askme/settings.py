@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import json
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -142,3 +143,12 @@ STATIC_ROOT = '/var/www/askme/static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login'
+
+try:
+    with open('centrifugo/config.json', 'r') as centrifugo_config:
+        config = json.load(centrifugo_config)
+        CENTRIFUGO_TOKEN_HMAC_SECRET_KEY = config['token_hmac_secret_key']
+        CENTRIFUGO_WS_URL = 'ws://127.0.0.1:8010/connection/websocket'
+except OSError as e:
+    print('error')
+    pass
