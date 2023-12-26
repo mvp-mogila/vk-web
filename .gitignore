@@ -137,4 +137,7 @@ askme/app/migrations
 askme/app/db_settings.py
 
 # logs
-askme/nginx*.log
+askme/nginx/*.log
+
+# centrifugo
+askme/centrifugo/*
