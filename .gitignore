@@ -135,3 +135,6 @@ askme/uploads
 .vscode
 askme/app/migrations
 askme/app/db_settings.py
+
+# logs
+askme/nginx*.log

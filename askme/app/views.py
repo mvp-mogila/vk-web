@@ -17,7 +17,7 @@ def index_handler(request):
     questions = Question.objects.new()
     if (not questions):
         return HttpResponseNotFound()
-    
+    print(1)
     context = {'title': 'New questions', 'objects': paginate(questions, page)}
     return render(request, 'index.html', context)
 
@@ -190,6 +190,7 @@ def answer_correct(request):
 
 
 def new_questions_handler(request):
+    print(2)
     page = request.GET.get('page', 1)
     questions = Question.objects.new()
     if (not questions):
@@ -199,6 +200,7 @@ def new_questions_handler(request):
 
 
 def hot_questions_handler(request):
+    print(3)
     page = request.GET.get('page', 1)
     questions = Question.objects.hot()
     if (not questions):
