@@ -17,6 +17,7 @@ def index_handler(request):
     questions = Question.objects.new()
     if (not questions):
         return HttpResponseNotFound()
+    print(1)
     context = {'title': 'New questions', 'objects': paginate(questions, page)}
     return render(request, 'index.html', context)
 
