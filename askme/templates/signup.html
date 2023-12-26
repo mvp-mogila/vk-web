@@ -4,7 +4,7 @@
 {% load django_bootstrap5 %}
 {% block content %}
 
-<form class="form-signup" method="POST" action="{% url 'signup' %}">
+<form class="form-signup" method="POST" action="{% url 'signup' %}" enctype="multipart/form-data">
     <div class="col-md-8 container-fluid">
         <h2>Registration</h2>
         <p class="fs-4">Create your new account and enjoy our website!</p>

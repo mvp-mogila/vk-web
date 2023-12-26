@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 
-from app.models import Question, Profile, Reaction, Tag, Answer
+from app.models import Question, Profile, Reaction, Answer
 from app.forms import LoginForm, ProfileForm, RegistrationForm, AskForm, AnswerForm
 
 
@@ -17,7 +17,7 @@ def index_handler(request):
     questions = Question.objects.new()
     if (not questions):
         return HttpResponseNotFound()
-    print(1)
+    
     context = {'title': 'New questions', 'objects': paginate(questions, page)}
     return render(request, 'index.html', context)
 
@@ -28,10 +28,14 @@ def signup_handler(request):
         registration_form = RegistrationForm()
 
     if (request.method == 'POST'):
-        registration_form = RegistrationForm(request.POST)
+        registration_form = RegistrationForm(request.POST, request.FILES)
         if (registration_form.is_valid()):
-            new_user = registration_form.save() # TODO profile_picture
-            Profile.objects.create(user = new_user, profile_pic = registration_form.cleaned_data['profile_picture'])
+            new_user = registration_form.save()
+            new_profile = Profile.objects.create(user=new_user)
+            if (registration_form.cleaned_data.get('profile_picture')):
+                new_profile.profile_pic = registration_form.cleaned_data.get('profile_picture')
+                new_profile.save()
+            return redirect(reverse('login'))
 
     context = {'registration_form': registration_form}
     return render(request, 'signup.html', context)

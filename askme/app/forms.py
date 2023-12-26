@@ -1,8 +1,7 @@
-from typing import Any
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from app.models import Answer, Question, Tag
+from app.models import Answer, Question, Tag, Profile
 
 
 class LoginForm(forms.Form):
@@ -15,7 +14,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2',)
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2',)        
 
 
 class AskForm(forms.ModelForm):
@@ -53,7 +52,7 @@ class AnswerForm(forms.ModelForm):
     
 
 class ProfileForm(forms.ModelForm):
-    profile_pic = forms.ImageField(required=False)
+    profile_picture = forms.ImageField(required=False)
     
     class Meta:
         model = User
@@ -62,7 +61,8 @@ class ProfileForm(forms.ModelForm):
     def save(self, **kwargs):
         user = super().save(**kwargs)
         profile = user.profile
-        if (self.cleaned_data.get('profile_pic')):
-            profile.profile_pic = self.cleaned_data.get('profile_pic')
+        if (self.cleaned_data.get('profile_picture')):
+            profile.profile_pic = self.cleaned_data.get('profile_picture')
+            print(profile.profile_pic)
             profile.save()
         return user
