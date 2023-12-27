@@ -62,8 +62,8 @@ class AnswerManager(models.Manager):
     
 
 class TagManager(models.Manager):
-    def best_tags(self, count: int):
-        return self.objects.annotate(total_questions=models.Count('questions')).order_by('-total_questions')[:count]
+    def popular_tags(self, count: int):
+        return self.annotate(total_questions=models.Count('question')).order_by('-total_questions')[:count]
     
     def create_or_get_tag(self, tag: str):
         tag = ''.join(tag.split())

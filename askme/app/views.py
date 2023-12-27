@@ -18,7 +18,7 @@ from askme.settings import CENTRIFUGO_API_KEY, CENTRIFUGO_API_URL
 client = Client(CENTRIFUGO_API_URL, api_key=CENTRIFUGO_API_KEY, timeout=1)
 
 def index_handler(request):
-    print(get_best_members())
+    print(get_popular_tags())
     page = request.GET.get('page', 1)
     questions = Question.objects.new()
     if (not questions):
