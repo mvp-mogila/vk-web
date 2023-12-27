@@ -4,6 +4,6 @@
   "admin_secret": "51ee886c-5535-4f0f-9a20-3573dc6dff08",
   "api_key": "ca68d86a-d27b-4547-958a-006696a247b4",
   "admin": true,
-  "allowed_origins": ["http://127.0.0.1"],
+  "allowed_origins": ["http://127.0.0.1", "http://127.0.0.1:8000"],
   "allow_subscribe_for_client": true
 }

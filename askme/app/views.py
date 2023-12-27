@@ -7,11 +7,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
+from cent import Client
 
 from app.models import Question, Profile, Reaction, Answer
 from app.forms import LoginForm, ProfileForm, RegistrationForm, AskForm, AnswerForm
 from app.services import get_centrifugo_data
+from askme.settings import CENTRIFUGO_API_KEY, CENTRIFUGO_API_URL
 
+
+client = Client(CENTRIFUGO_API_URL, api_key=CENTRIFUGO_API_KEY, timeout=1)
 
 def index_handler(request):
     page = request.GET.get('page', 1)
@@ -138,13 +142,16 @@ def question_handler(request, question_id):
         answer_form = AnswerForm(request.POST)
         if (answer_form.is_valid()):
             author = request.user.profile
-            answer_form.save(author, question)
+            answer = answer_form.save(author, question)
             author.add_answer()
+
+            client.publish(f'question.{question.id}', model_to_dict(answer))
+
             new_page = Paginator(question.answer.all(), 3).num_pages
             return redirect(reverse('question', args=[question_id]) + f'?page={new_page}')
 
-    if (request.user.id):
-        centrifugo = get_centrifugo_data(request.user.id)
+
+    centrifugo = get_centrifugo_data(request.user.id, f'question.{question.id}')
     context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form, 'owner': owner, **centrifugo}
     return render(request, 'question.html', context)
 
