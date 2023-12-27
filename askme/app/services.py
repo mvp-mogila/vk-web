@@ -19,21 +19,31 @@ def get_centrifugo_data(user_id: int, channel: str):
     }
 
 
-def cache_best_members():
-    best_members = Profile.objects.best_members(5)
-    cache.set('best_members', best_members, (60+60*60))
-
-
 def get_best_members():
     best_members = cache.get('best_members')
-    return {'best_memebers': best_members}
 
+    if (not best_members):
+        best_members = Profile.objects.best_members(5)
+        cache.set('best_members', best_members, 10)
 
-def cache_popular_tags():
-    popular_tags = Tag.objects.popular_tags(8)
-    cache.set('popular_tags', popular_tags, (60+60*60))
+    return {'best_members': best_members}
 
 
 def get_popular_tags():
     popular_tags = cache.get('popular_tags')
+
+    if (not popular_tags):
+        popular_tags = Tag.objects.popular_tags(8)
+        cache.set('popular_tags', popular_tags, 10)
+
     return {'popular_tags': popular_tags}
+
+
+def cache_best_members():
+    best_members = [1, 2, 3]
+    cache.set('best_members', best_members, 10)
+
+
+def cache_popular_tags():
+    popular_tags = Tag.objects.popular_tags(8)
+    cache.set('popular_tags', popular_tags, 10)

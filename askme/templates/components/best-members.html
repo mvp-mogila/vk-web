@@ -1,43 +1,13 @@
 <section class="users mt-5 bg-light">
-    <h3>Best Members</h3>
-    <div class="row">
-        <div class="col-6">
-            <a href="" class="list-group-item list-group-item-action fs-4">User1</a>
+    <h3 style="color: orange;">Best Members</h3>
+    {% for profile in best_members %}
+        <div class="row">
+            <div class="col-6">
+                <a href="{% url 'profile' username=profile.user.username %}" class="list-group-item list-group-item-action fs-4">{{ profile.user.username }}</a>
+            </div>
+            <div class="col-6">
+                <h4>{{ profile.rating }}</h4>
+            </div>
         </div>
-        <div class="col-6">
-            <h4>100</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <a href="" class="list-group-item list-group-item-action fs-4">User2</a>
-        </div>
-        <div class="col-6">
-            <h4>99</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <a href="" class="list-group-item list-group-item-action fs-4">User3</a>
-        </div>
-        <div class="col-6">
-            <h4>87</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <a href="" class="list-group-item list-group-item-action fs-4">User4</a>
-        </div>
-        <div class="col-6">
-            <h4>34</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <a href="" class="list-group-item list-group-item-action fs-4">User5</a>
-        </div>
-        <div class="col-6">
-            <h4>1</h4>
-        </div>
-    </div>
+    {% endfor %}
 </section>

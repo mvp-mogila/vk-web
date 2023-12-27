@@ -1,3 +1,4 @@
+from functools import cache
 from django.forms import model_to_dict
 from django.http import HttpResponseNotFound, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -18,12 +19,13 @@ from askme.settings import CENTRIFUGO_API_KEY, CENTRIFUGO_API_URL
 client = Client(CENTRIFUGO_API_URL, api_key=CENTRIFUGO_API_KEY, timeout=1)
 
 def index_handler(request):
-    print(get_popular_tags())
     page = request.GET.get('page', 1)
     questions = Question.objects.new()
     if (not questions):
         return HttpResponseNotFound()
-    context = {'title': 'New questions', 'objects': paginate(questions, page)}
+    context = {'title': 'New questions', 'objects': paginate(questions, page), **get_best_members(), **get_popular_tags()}
+    print(get_popular_tags())
+    print(get_best_members())
     return render(request, 'index.html', context)
 
 
@@ -42,7 +44,7 @@ def signup_handler(request):
                 new_profile.save()
             return redirect(reverse('login'))
 
-    context = {'registration_form': registration_form}
+    context = {'registration_form': registration_form, **get_best_members(), **get_popular_tags()}
     return render(request, 'signup.html', context)
 
 
@@ -63,7 +65,7 @@ def login_handler(request):
                 login_form = LoginForm()
                 error = True
 
-    context = {'login_form': login_form, 'error': error}
+    context = {'login_form': login_form, 'error': error, **get_best_members(), **get_popular_tags()}
     return render(request, 'login.html', context)
 
 
@@ -73,7 +75,7 @@ def profile_handler(request, username):
     if (request.user.username == username):
         if (request.method == 'GET'):
             profile_form = ProfileForm(initial=model_to_dict(request.user))
-            context = {'owner': True, 'profile_form': profile_form, 'profile': profile}
+            context = {'owner': True, 'profile_form': profile_form, 'profile': profile, **get_best_members(), **get_popular_tags()}
 
         if (request.method == 'POST'):
             profile_form = ProfileForm(request.POST, request.FILES, instance=request.user)
@@ -81,7 +83,7 @@ def profile_handler(request, username):
                 profile_form.save()
                 return redirect(reverse('profile', args=[username]))
     else:
-        context = {'owner': False, 'profile': profile}
+        context = {'owner': False, 'profile': profile, **get_best_members(), **get_popular_tags()}
 
     return render(request, 'profile.html', context)
 
@@ -107,7 +109,7 @@ def ask_handler(request):
             author.add_question()
             return redirect(reverse('question', args=[new_question.id]))
 
-    context = {'ask_form': ask_form}
+    context = {'ask_form': ask_form, **get_best_members(), **get_popular_tags()}
     return render(request, 'ask.html', context)
 
 
@@ -116,7 +118,7 @@ def tag_handler(request, tag_name):
     questions = Question.objects.questions_by_tag(tag_name)
     if (not questions):
         return HttpResponseNotFound()
-    context = {'title': f"Questions by tag \"{tag_name}\"", 'objects': paginate(questions, page)}
+    context = {'title': f"Questions by tag \"{tag_name}\"", 'objects': paginate(questions, page), **get_best_members(), **get_popular_tags()}
     return render(request, 'index.html', context)
 
 
@@ -153,7 +155,7 @@ def question_handler(request, question_id):
 
 
     centrifugo = get_centrifugo_data(request.user.id, f'question.{question.id}')
-    context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form, 'owner': owner, **centrifugo}
+    context = {'question': question, 'objects': paginate(answers, page), 'answer_form': answer_form, 'owner': owner, **centrifugo, **get_best_members(), **get_popular_tags()}
     return render(request, 'question.html', context)
 
 
@@ -204,7 +206,7 @@ def new_questions_handler(request):
     questions = Question.objects.new()
     if (not questions):
         return HttpResponseNotFound()
-    context = {'title': 'New questions', 'objects': paginate(questions, page)}
+    context = {'title': 'New questions', 'objects': paginate(questions, page), **get_best_members(), **get_popular_tags()}
     return render(request, 'index.html', context)
 
 
@@ -213,7 +215,7 @@ def hot_questions_handler(request):
     questions = Question.objects.hot()
     if (not questions):
         return HttpResponseNotFound()
-    context = {'title': 'Top questions', 'objects': paginate(questions, page)}
+    context = {'title': 'Top questions', 'objects': paginate(questions, page), **get_best_members(), **get_popular_tags()}
     return render(request, 'index.html', context)
 
 

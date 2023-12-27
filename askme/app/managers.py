@@ -63,8 +63,8 @@ class AnswerManager(models.Manager):
 
 class TagManager(models.Manager):
     def popular_tags(self, count: int):
-        three_months_ago = datetime.datetime.now() - datetime.timedelta(days=90)
-        return self.annotate(total_questions=models.Count('question')).filter(question__time_created__gte=three_months_ago).order_by('-total_questions')[:count]
+        # three_months_ago = datetime.datetime.now() - datetime.timedelta(days=90)
+        return self.annotate(total_questions=models.Count('question')).order_by('-total_questions')[:count]
     
     def create_or_get_tag(self, tag: str):
         tag = ''.join(tag.split())
