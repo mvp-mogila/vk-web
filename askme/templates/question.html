@@ -44,7 +44,14 @@
         const sub = centrifuge.newSubscription("{{ centrifugo.channel }}");
 
         sub.on('publication', function (ctx) {
+            
+            const notification = new Notification('New answer!', {
+                body: ctx.data.content,
+            });
+            
+            
             console.log(ctx);
+            console.log(ctx.data.content);
         }).on('subscribing', function (ctx) {
         console.log(`subscribing: ${ctx.code}, ${ctx.reason}`);
         }).on('subscribed', function (ctx) {
