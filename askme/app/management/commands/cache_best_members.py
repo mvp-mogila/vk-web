@@ -8,4 +8,5 @@ class Command(BaseCommand):
     
     def handle(self, *args, **kwargs):
         cache_best_members()
-        print(get_best_members())
+        with open("/home/artem/Desktop/tmp.txt", "a") as file:
+            file.write('Hello from python')

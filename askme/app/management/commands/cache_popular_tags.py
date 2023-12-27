@@ -8,3 +8,5 @@ class Command(BaseCommand):
     
     def handle(self, *args, **kwargs):
         cache_popular_tags()
+        with open("/home/artem/Desktop/tmp.txt", "a") as file:
+            file.write('Hello from python')

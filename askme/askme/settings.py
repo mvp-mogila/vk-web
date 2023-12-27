@@ -42,7 +42,13 @@ INSTALLED_APPS = [
     'app',
     'django_bootstrap5',
     'centrifugo',
-    'django_redis'
+    'django_redis',
+    'django_crontab',
+]
+
+CRONJOBS = [
+    ('* * * * *', 'app.services.cache_best_members'),
+    ('* * * * *', 'app.services.cache_popular_tags'),
 ]
 
 MIDDLEWARE = [

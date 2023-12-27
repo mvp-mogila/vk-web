@@ -24,7 +24,7 @@ def get_best_members():
 
     if (not best_members):
         best_members = Profile.objects.best_members(5)
-        cache.set('best_members', best_members, 10)
+        cache.set('best_members', best_members, 120)
 
     return {'best_members': best_members}
 
@@ -34,16 +34,14 @@ def get_popular_tags():
 
     if (not popular_tags):
         popular_tags = Tag.objects.popular_tags(8)
-        cache.set('popular_tags', popular_tags, 10)
+        cache.set('popular_tags', popular_tags, 120)
 
     return {'popular_tags': popular_tags}
 
 
 def cache_best_members():
-    best_members = [1, 2, 3]
-    cache.set('best_members', best_members, 10)
+    cache.set('best_members', Profile.objects.best_members(5), 120)
 
 
 def cache_popular_tags():
-    popular_tags = Tag.objects.popular_tags(8)
-    cache.set('popular_tags', popular_tags, 10)
+    cache.set('popular_tags', Tag.objects.popular_tags(8), 120)
