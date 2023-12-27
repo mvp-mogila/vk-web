@@ -11,13 +11,14 @@ from cent import Client
 
 from app.models import Question, Profile, Reaction, Answer
 from app.forms import LoginForm, ProfileForm, RegistrationForm, AskForm, AnswerForm
-from app.services import get_centrifugo_data
+from app.services import get_centrifugo_data, get_best_members, get_popular_tags
 from askme.settings import CENTRIFUGO_API_KEY, CENTRIFUGO_API_URL
 
 
 client = Client(CENTRIFUGO_API_URL, api_key=CENTRIFUGO_API_KEY, timeout=1)
 
 def index_handler(request):
+    print(get_best_members())
     page = request.GET.get('page', 1)
     questions = Question.objects.new()
     if (not questions):

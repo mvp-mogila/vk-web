@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'django_bootstrap5',
+    'centrifugo',
+    'django_redis'
 ]
 
 MIDDLEWARE = [
@@ -149,6 +151,19 @@ try:
         config = json.load(centrifugo_config)
         CENTRIFUGO_TOKEN_HMAC_SECRET_KEY = config['token_hmac_secret_key']
         CENTRIFUGO_WS_URL = 'ws://127.0.0.1:8010/connection/websocket'
+        CENTRIFUGO_API_URL = 'http://127.0.0.1:8010/api'
+        CENTRIFUGO_API_KEY = config['api_key']
 except OSError as e:
     print('error')
     pass
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}

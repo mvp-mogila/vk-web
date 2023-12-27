@@ -62,8 +62,8 @@ class AnswerManager(models.Manager):
     
 
 class TagManager(models.Manager):
-    def best_tags(self):
-        return self.all().order_by('-rating')
+    def best_tags(self, count: int):
+        return self.objects.annotate(total_questions=models.Count('questions')).order_by('-total_questions')[:count]
     
     def create_or_get_tag(self, tag: str):
         tag = ''.join(tag.split())
@@ -95,6 +95,9 @@ class ProfileManager(models.Manager):
         rating -= self.reaction__positive.filter(positive = False)
         self.rating = rating
         return rating
+    
+    def best_members(self, count: int):
+        return self.all().order_by('-rating')[:count]
 
 
 class ReactionManager(models.Manager):
